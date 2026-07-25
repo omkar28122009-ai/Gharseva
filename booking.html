@@ -1,0 +1,1606 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GharSeva | Live Booking & Tracking Hub</title>
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <style>
+        /* --- HIGH-END MODERN DESIGN SYSTEM --- */
+        :root {
+            --brand-primary: #6366f1;       
+            --brand-primary-glow: rgba(99, 102, 241, 0.4);
+            --brand-success: #10b981;
+            --brand-success-glow: rgba(16, 185, 129, 0.4);
+            --brand-danger: #ef4444;
+            --brand-danger-glow: rgba(239, 68, 68, 0.4);
+            --brand-glow-gold: #f59e0b;     
+            --brand-glow-orange: #f97316;   
+            --brand-info: #38bdf8;
+            
+            --bg-main: #070913;             
+            --bg-card: rgba(15, 23, 42, 0.65); 
+            --bg-card-hover: rgba(30, 41, 59, 0.75);
+            --border-color: rgba(255, 255, 255, 0.08);
+            --border-focus: rgba(99, 102, 241, 0.5);
+            
+            --card-shadow: 0 12px 32px -4px rgba(0, 0, 0, 0.5), 0 4px 12px -2px rgba(0, 0, 0, 0.3);
+            --glow-shadow: 0 0 25px rgba(99, 102, 241, 0.25);
+            
+            --radius-round: 999px;
+            --radius-card: 20px;
+            --radius-sm: 12px;
+            
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --font-stack: 'Plus Jakarta Sans', sans-serif;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: var(--font-stack);
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            background-color: #030712; 
+            color: var(--text-main);
+            line-height: 1.5;
+            display: flex;
+            justify-content: center;
+            min-height: 100vh;
+            overflow-x: hidden;
+            opacity: 0;
+            transition: opacity 0.4s ease;
+        }
+
+        body.page-loaded {
+            opacity: 1;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 480px; 
+            background: var(--bg-main);
+            box-shadow: 0 0 80px rgba(99, 102, 241, 0.15); 
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            overflow-x: hidden;
+            padding-bottom: 60px;
+            min-height: 100vh;
+        }
+
+        /* Dynamic Background Orbs with Pulse Animation */
+        .glow-orb {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(90px);
+            opacity: 0.22;
+            pointer-events: none;
+            z-index: 1;
+            animation: orbFloat 10s ease-in-out infinite alternate;
+        }
+        .orb-1 { top: -2%; right: -50px; width: 250px; height: 250px; background: var(--brand-primary); }
+        .orb-2 { top: 40%; left: -60px; width: 280px; height: 280px; background: var(--brand-glow-orange); animation-delay: -3s; }
+        .orb-3 { bottom: 5%; right: -40px; width: 220px; height: 220px; background: var(--brand-glow-gold); animation-delay: -6s; }
+
+        @keyframes orbFloat {
+            0% { transform: translate(0, 0) scale(1); }
+            50% { transform: translate(15px, 20px) scale(1.08); }
+            100% { transform: translate(-10px, 10px) scale(0.95); }
+        }
+
+        .section-padding { 
+            padding: 20px; 
+            position: relative;
+            z-index: 2; 
+        }
+
+        /* Glassmorphism Cards */
+        .glass-card {
+            background: var(--bg-card);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid var(--border-color);
+            box-shadow: var(--card-shadow);
+            border-radius: var(--radius-card);
+            padding: 22px;
+            margin-bottom: 20px;
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        /* App Header */
+        .app-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 18px 20px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background: rgba(7, 9, 19, 0.85);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .btn-back-round {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--border-color);
+            color: #ffffff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            text-decoration: none;
+        }
+        .btn-back-round:hover {
+            background: rgba(99, 102, 241, 0.15);
+            border-color: var(--brand-primary);
+            color: var(--brand-primary);
+            transform: scale(1.08);
+        }
+
+        .header-title {
+            font-size: 1.15rem;
+            font-weight: 800;
+            color: #ffffff;
+            letter-spacing: -0.02em;
+            background: linear-gradient(135deg, #ffffff 0%, #cbd5e1 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .step-badge {
+            background: rgba(99, 102, 241, 0.12);
+            border: 1px solid rgba(99, 102, 241, 0.3);
+            color: #a5b4fc;
+            padding: 5px 12px;
+            border-radius: var(--radius-round);
+            font-size: 0.68rem;
+            font-weight: 800;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            box-shadow: 0 0 12px rgba(99, 102, 241, 0.2);
+        }
+
+        /* Action Portal */
+        .action-portal-card {
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.18) 0%, rgba(15, 23, 42, 0.75) 100%);
+            border: 1px solid rgba(99, 102, 241, 0.3);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 18px 20px;
+            border-radius: var(--radius-card);
+            margin-bottom: 22px;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            position: relative;
+            overflow: hidden;
+        }
+        .action-portal-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: -100%; width: 100%; height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.08), transparent);
+            transition: left 0.6s ease;
+        }
+        .action-portal-card:hover::before {
+            left: 100%;
+        }
+        .action-portal-card:hover {
+            transform: translateY(-3px);
+            border-color: var(--brand-primary);
+            box-shadow: 0 12px 35px rgba(99, 102, 241, 0.3);
+        }
+        .portal-text-group h3 {
+            font-size: 0.95rem;
+            font-weight: 800;
+            color: #ffffff;
+            margin-bottom: 2px;
+        }
+        .portal-text-group p {
+            font-size: 0.74rem;
+            color: var(--text-muted);
+        }
+        .portal-arrow-circle {
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--brand-primary) 0%, #4f46e5 100%);
+            color: #ffffff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.9rem;
+            box-shadow: 0 4px 15px rgba(99, 102, 241, 0.5);
+            transition: transform 0.3s ease;
+        }
+        .action-portal-card:hover .portal-arrow-circle {
+            transform: translateX(4px) rotate(15deg);
+        }
+
+        .section-title-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+
+        .section-title {
+            font-size: 1.05rem;
+            font-weight: 800;
+            color: #ffffff;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            letter-spacing: -0.01em;
+        }
+
+        /* Cart & Checkout Items */
+        .cart-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+
+        .cart-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 14px;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: var(--radius-sm);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            animation: slideIn 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateY(8px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .cart-item-name {
+            font-size: 0.88rem;
+            font-weight: 600;
+            color: #ffffff;
+        }
+
+        .cart-item-meta {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+
+        .cart-item-price {
+            font-size: 0.9rem;
+            font-weight: 800;
+            color: var(--brand-glow-gold);
+        }
+
+        .btn-remove-item {
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid rgba(239, 68, 68, 0.2);
+            color: #fca5a5;
+            width: 30px;
+            height: 30px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.82rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+        }
+        .btn-remove-item:hover { 
+            background: var(--brand-danger); 
+            color: #ffffff;
+            transform: scale(1.08);
+        }
+
+        .breakdown-row {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.82rem;
+            color: var(--text-muted);
+            margin-bottom: 8px;
+        }
+
+        .breakdown-row.discount { color: var(--brand-success); display: none; font-weight: 700; }
+        .divider { height: 1px; background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent); margin: 14px 0; }
+
+        .total-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: 800;
+            font-size: 1.2rem;
+            color: #ffffff;
+        }
+        .total-price { 
+            color: var(--brand-glow-gold); 
+            text-shadow: 0 0 12px rgba(245, 158, 11, 0.3);
+        }
+
+        .promo-wrapper { display: flex; gap: 8px; margin-top: 16px; }
+        .promo-input {
+            flex-grow: 1;
+            background: rgba(11, 15, 25, 0.7);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 10px 14px;
+            color: #ffffff;
+            font-size: 0.82rem;
+            outline: none;
+            text-transform: uppercase;
+            transition: all 0.2s;
+        }
+        .promo-input:focus {
+            border-color: var(--brand-primary);
+            box-shadow: 0 0 12px rgba(99, 102, 241, 0.25);
+        }
+        .btn-promo-apply {
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid var(--border-color);
+            color: #ffffff;
+            padding: 0 18px;
+            border-radius: 12px;
+            font-size: 0.78rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .btn-promo-apply:hover { 
+            border-color: var(--brand-glow-gold); 
+            color: var(--brand-glow-gold); 
+            background: rgba(245, 158, 11, 0.1);
+        }
+
+        /* Forms */
+        .form-group { margin-bottom: 16px; }
+        .form-group label {
+            display: block;
+            font-size: 0.68rem;
+            font-weight: 800;
+            color: var(--text-muted);
+            margin-bottom: 6px;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+        }
+        .form-control {
+            width: 100%;
+            background: rgba(11, 15, 25, 0.7);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 12px 14px;
+            color: #ffffff;
+            font-size: 0.85rem;
+            outline: none;
+            transition: all 0.25s;
+        }
+        .form-control:focus {
+            border-color: var(--brand-glow-orange);
+            box-shadow: 0 0 18px rgba(249, 115, 22, 0.2);
+            background: rgba(15, 23, 42, 0.9);
+        }
+        textarea.form-control { resize: none; height: 80px; }
+
+        .btn-checkout-confirm, .btn-primary-action {
+            width: 100%;
+            padding: 16px;
+            font-size: 0.95rem;
+            font-weight: 800;
+            border-radius: var(--radius-card);
+            border: none;
+            background: linear-gradient(135deg, var(--brand-glow-orange) 0%, var(--brand-glow-gold) 100%);
+            color: #0f172a;
+            cursor: pointer;
+            box-shadow: 0 8px 25px rgba(249, 115, 22, 0.35);
+            transition: all 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            text-align: center;
+        }
+        .btn-checkout-confirm:hover, .btn-primary-action:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 30px rgba(249, 115, 22, 0.5);
+        }
+        .btn-checkout-confirm:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .cart-empty-state { text-align: center; padding: 28px 10px; }
+        .cart-icon-glowing {
+            font-size: 3.2rem;
+            color: var(--brand-glow-gold);
+            margin-bottom: 16px;
+            filter: drop-shadow(0 0 20px rgba(251, 191, 36, 0.4));
+            animation: floatCart 3.5s ease-in-out infinite;
+        }
+        @keyframes floatCart {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-8px); }
+        }
+
+        /* Sync Pulse Indicator */
+        .sync-indicator {
+            font-size: 0.65rem;
+            font-weight: 800;
+            color: var(--brand-success);
+            background: rgba(16, 185, 129, 0.1);
+            border: 1px solid rgba(16, 185, 129, 0.25);
+            padding: 4px 10px;
+            border-radius: var(--radius-round);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .sync-dot {
+            width: 7px;
+            height: 7px;
+            background-color: var(--brand-success);
+            border-radius: 50%;
+            position: relative;
+        }
+        .sync-dot::after {
+            content: ''; position: absolute; width: 100%; height: 100%; background: inherit; border-radius: 50%;
+            animation: ping 1.6s infinite ease-out;
+        }
+        @keyframes ping {
+            0% { transform: scale(1); opacity: 1; }
+            100% { transform: scale(3); opacity: 0; }
+        }
+
+        /* Search Control */
+        .search-wrapper { position: relative; margin-bottom: 16px; }
+        .search-control {
+            width: 100%; background: rgba(11, 15, 25, 0.7); border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 14px; padding: 12px 14px 12px 42px; color: #ffffff; font-size: 0.82rem; outline: none;
+            transition: all 0.3s;
+        }
+        .search-control:focus { 
+            border-color: var(--brand-primary); 
+            background: rgba(15, 23, 42, 0.9);
+            box-shadow: 0 0 20px rgba(99, 102, 241, 0.2);
+        }
+        .search-icon-decor { position: absolute; left: 15px; top: 50%; transform: translateY(-50%); color: var(--text-muted); font-size: 0.88rem; }
+
+        /* Filter Ribbon Chips */
+        .filter-ribbon { display: flex; gap: 8px; margin-bottom: 20px; overflow-x: auto; padding-bottom: 6px; scrollbar-width: none; }
+        .filter-ribbon::-webkit-scrollbar { display: none; }
+        .filter-chip {
+            background: rgba(255, 255, 255, 0.03); 
+            border: 1px solid rgba(255, 255, 255, 0.08); 
+            color: var(--text-muted);
+            padding: 8px 14px; 
+            border-radius: var(--radius-round); 
+            font-size: 0.72rem; 
+            font-weight: 700; 
+            cursor: pointer;
+            white-space: nowrap; 
+            display: flex; 
+            align-items: center; 
+            gap: 6px; 
+            transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .filter-chip:hover {
+            background: rgba(255, 255, 255, 0.08);
+            color: #ffffff;
+        }
+        .filter-chip.active { 
+            background: rgba(99, 102, 241, 0.2); 
+            border-color: var(--brand-primary); 
+            color: #ffffff; 
+            box-shadow: 0 0 15px rgba(99, 102, 241, 0.25);
+        }
+        .filter-chip-count { 
+            background: rgba(255, 255, 255, 0.1); 
+            padding: 1px 7px; 
+            border-radius: 8px; 
+            font-size: 0.65rem; 
+        }
+
+        /* Feed & Tracking Cards */
+        .feed-container { display: flex; flex-direction: column; gap: 16px; }
+        .tracking-card {
+            background: rgba(15, 23, 42, 0.7); 
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: var(--radius-card); 
+            padding: 18px; 
+            cursor: pointer; 
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            position: relative; 
+            overflow: hidden;
+            box-shadow: var(--card-shadow);
+        }
+        .tracking-card:hover { 
+            border-color: rgba(255, 255, 255, 0.2); 
+            transform: translateY(-2px); 
+            background: var(--bg-card-hover);
+        }
+        .tracking-card.pulse-active {
+            border-color: rgba(99, 102, 241, 0.4);
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.5), inset 0 0 20px rgba(99, 102, 241, 0.1);
+        }
+        
+        .card-top-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 12px; }
+        .card-service-title { font-size: 0.95rem; font-weight: 800; color: #ffffff; max-width: 70%; line-height: 1.3; }
+        
+        .status-badge {
+            font-size: 0.65rem; font-weight: 800; padding: 4px 10px; border-radius: var(--radius-round);
+            text-transform: uppercase; letter-spacing: 0.5px; display: flex; align-items: center; gap: 5px;
+        }
+        .badge-pending { background: rgba(249, 115, 22, 0.12); border: 1px solid rgba(249, 115, 22, 0.3); color: var(--brand-glow-orange); }
+        .badge-verified { background: rgba(56, 189, 248, 0.12); border: 1px solid rgba(56, 189, 248, 0.3); color: var(--brand-info); }
+        .badge-transit { background: rgba(99, 102, 241, 0.15); border: 1px solid rgba(99, 102, 241, 0.35); color: #a5b4fc; }
+        .badge-completed { background: rgba(16, 185, 129, 0.12); border: 1px solid rgba(16, 185, 129, 0.3); color: var(--brand-success); }
+        .badge-cancelled { background: rgba(239, 68, 68, 0.12); border: 1px solid rgba(239, 68, 68, 0.3); color: var(--brand-danger); }
+
+        .card-price-matrix { font-size: 1rem; font-weight: 800; color: var(--brand-glow-gold); }
+
+        /* --- REDESIGNED ENHANCED PROGRESS LINE WITH 4 UNIQUE ANIMATED ICONS --- */
+        .tracking-progress-wrapper { 
+            display: flex; 
+            align-items: center; 
+            justify-content: space-between; 
+            margin: 22px 6px 12px 6px; 
+            position: relative; 
+        }
+        .progress-line-back { 
+            position: absolute; 
+            height: 4px; 
+            background: rgba(255, 255, 255, 0.08); 
+            width: 100%; 
+            top: 50%; 
+            transform: translateY(-50%); 
+            z-index: 1; 
+            border-radius: 4px;
+        }
+        .progress-line-fill { 
+            position: absolute; 
+            height: 4px; 
+            background: linear-gradient(90deg, var(--brand-primary), var(--brand-info), var(--brand-success)); 
+            width: 0%; 
+            top: 50%; 
+            transform: translateY(-50%); 
+            z-index: 2; 
+            transition: width 0.6s cubic-bezier(0.34, 1.56, 0.64, 1); 
+            border-radius: 4px;
+            box-shadow: 0 0 10px rgba(16, 185, 129, 0.5);
+        }
+        
+        .progress-step-node {
+            width: 32px; 
+            height: 32px; 
+            border-radius: 50%; 
+            background: #0f172a; 
+            border: 2px solid #334155;
+            z-index: 3; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            font-size: 0.75rem; 
+            color: #64748b;
+            transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+            position: relative;
+        }
+
+        /* Active & Completed Custom Animations for 4 Timeline Nodes */
+        .progress-step-node.completed { 
+            background: linear-gradient(135deg, var(--brand-success) 0%, #059669 100%); 
+            border-color: var(--brand-success); 
+            color: #ffffff; 
+            box-shadow: 0 0 14px rgba(16, 185, 129, 0.6);
+            transform: scale(1.05);
+        }
+
+        .progress-step-node.active { 
+            background: #0b0f19; 
+            border-color: var(--brand-primary); 
+            color: var(--brand-primary); 
+            box-shadow: 0 0 18px var(--brand-primary);
+            animation: pulseActiveNode 2s infinite alternate;
+        }
+
+        @keyframes pulseActiveNode {
+            0% { transform: scale(1); box-shadow: 0 0 10px var(--brand-primary); }
+            100% { transform: scale(1.18); box-shadow: 0 0 22px var(--brand-primary), 0 0 35px var(--brand-primary-glow); }
+        }
+
+        /* Dynamic Node Icon Animations */
+        .progress-step-node i {
+            transition: transform 0.3s ease;
+        }
+        .progress-step-node.active i.fa-file-invoice { animation: iconBounce 1.5s infinite; }
+        .progress-step-node.active i.fa-shield-halved { animation: iconSpin 4s linear infinite; }
+        .progress-step-node.active i.fa-truck-fast { animation: iconDrive 1.2s ease-in-out infinite alternate; }
+        .progress-step-node.active i.fa-circle-check { animation: iconPop 1s ease-in-out infinite alternate; }
+
+        @keyframes iconBounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-3px); } }
+        @keyframes iconSpin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        @keyframes iconDrive { 0% { transform: translateX(-2px); } 100% { transform: translateX(2px); } }
+        @keyframes iconPop { 0% { transform: scale(0.9); } 100% { transform: scale(1.15); } }
+
+        .card-interactive-row { display: flex; justify-content: space-between; align-items: center; color: var(--text-muted); font-size: 0.74rem; margin-top: 14px; border-top: 1px solid rgba(255, 255, 255, 0.05); padding-top: 12px; }
+        .chevron-icon { transition: transform 0.3s ease; }
+        .tracking-card.active .chevron-icon { transform: rotate(180deg); color: var(--brand-primary); }
+
+        .card-details-drawer { display: grid; grid-template-rows: 0fr; transition: grid-template-rows 0.3s cubic-bezier(0.16, 1, 0.3, 1); opacity: 0; }
+        .tracking-card.active .card-details-drawer { grid-template-rows: 1fr; opacity: 1; margin-top: 14px; padding-top: 14px; border-top: 1px solid rgba(255,255,255,0.08); }
+        .drawer-content { overflow: hidden; display: flex; flex-direction: column; gap: 10px; }
+        
+        .detail-row { display: flex; align-items: center; gap: 10px; font-size: 0.78rem; color: #cbd5e1; }
+        .action-icon-btn { background: rgba(255,255,255,0.05); border: 1px solid rgba(255, 255, 255, 0.1); color: #ffffff; width: 28px; height: 28px; border-radius: 8px; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 0.75rem; transition: all 0.2s; }
+        .action-icon-btn:hover { background: rgba(255,255,255,0.15); color: var(--brand-glow-gold); }
+
+        .drawer-button-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 10px; }
+        .btn-drawer-action { padding: 12px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.1); background: rgba(255,255,255,0.04); color: #ffffff; font-size: 0.75rem; font-weight: 700; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; transition: all 0.25s; }
+        .btn-drawer-action.chat-trigger { border-color: rgba(99, 102, 241, 0.4); background: rgba(99, 102, 241, 0.1); color: #a5b4fc; }
+        .btn-drawer-action.chat-trigger:hover { background: var(--brand-primary); color: #ffffff; box-shadow: 0 4px 15px rgba(99, 102, 241, 0.4); }
+        .btn-drawer-action.cancel-trigger { border-color: rgba(239, 68, 68, 0.4); background: rgba(239, 68, 68, 0.1); color: #fca5a5; }
+        .btn-drawer-action.cancel-trigger:hover { background: var(--brand-danger); color: #ffffff; box-shadow: 0 4px 15px rgba(239, 68, 68, 0.4); }
+
+        /* Success Screen Modal */
+        .success-overlay {
+            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(3, 7, 18, 0.92);
+            backdrop-filter: blur(25px); -webkit-backdrop-filter: blur(25px); z-index: 20000; display: flex; align-items: center; justify-content: center;
+            opacity: 0; pointer-events: none; transition: opacity 0.4s ease; padding: 20px;
+        }
+        .success-overlay.active { opacity: 1; pointer-events: auto; }
+        .success-window { text-align: center; max-width: 380px; transform: scale(0.85); transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+        .success-overlay.active .success-window { transform: scale(1); }
+        
+        .success-checkmark-glow {
+            width: 80px; height: 80px; border-radius: 50%; background: rgba(16, 185, 129, 0.15);
+            border: 2px solid var(--brand-success); color: var(--brand-success); font-size: 2.4rem;
+            display: flex; align-items: center; justify-content: center; margin: 0 auto 20px auto;
+            box-shadow: 0 0 35px rgba(16, 185, 129, 0.5);
+            animation: pulseSuccess 2s infinite alternate;
+        }
+        @keyframes pulseSuccess { 0% { transform: scale(1); } 100% { transform: scale(1.08); } }
+
+        /* Confirmation Backdrop Modal */
+        .modal-backdrop {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7);
+            backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); z-index: 15000; display: flex; align-items: center; justify-content: center;
+            opacity: 0; pointer-events: none; transition: all 0.3s ease; padding: 20px;
+        }
+        .modal-backdrop.active { opacity: 1; pointer-events: auto; }
+        .modal-box { background: #0f172a; border: 1px solid var(--border-color); border-radius: 22px; padding: 24px; width: 100%; max-width: 360px; box-shadow: var(--card-shadow); }
+        .modal-title { font-size: 1.05rem; font-weight: 800; color: #ffffff; margin-bottom: 8px; }
+        .modal-desc { font-size: 0.8rem; color: var(--text-muted); margin-bottom: 20px; line-height: 1.4; }
+        .modal-btn-row { display: flex; justify-content: flex-end; gap: 10px; }
+
+        /* Chat Support Drawer */
+        .chat-drawer-overlay {
+            position: fixed; bottom: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.6);
+            backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); z-index: 18000; opacity: 0; pointer-events: none; transition: opacity 0.3s ease;
+        }
+        .chat-drawer-overlay.active { opacity: 1; pointer-events: auto; }
+        .chat-container-box {
+            position: fixed; bottom: 0; left: 50%; transform: translate(-50%, 100%); width: 100%; max-width: 480px;
+            height: 75vh; background: #0b0f19; border-radius: 28px 28px 0 0; border: 1px solid var(--border-color);
+            box-shadow: 0 -15px 50px rgba(0,0,0,0.6); z-index: 19000; display: flex; flex-direction: column;
+            transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .chat-drawer-overlay.active + .chat-container-box, 
+        .chat-container-box.active { transform: translate(-50%, 0); }
+        
+        .chat-header { padding: 18px 20px; border-bottom: 1px solid var(--border-color); display: flex; justify-content: space-between; align-items: center; background: rgba(15, 23, 42, 0.8); }
+        .chat-logs-area { flex-grow: 1; padding: 18px; overflow-y: auto; display: flex; flex-direction: column; gap: 12px; scroll-behavior: smooth; }
+        
+        .chat-bubble { max-width: 82%; padding: 12px 16px; border-radius: 16px; font-size: 0.8rem; line-height: 1.45; animation: slideIn 0.25s ease forwards; }
+        .chat-bubble.agent { background: rgba(255,255,255,0.06); color: #f1f5f9; align-self: flex-start; border-radius: 4px 16px 16px 16px; border: 1px solid rgba(255,255,255,0.05); }
+        .chat-bubble.client { background: linear-gradient(135deg, var(--brand-primary) 0%, #4f46e5 100%); color: #ffffff; align-self: flex-end; border-radius: 16px 16px 4px 16px; box-shadow: 0 4px 15px rgba(99, 102, 241, 0.3); }
+        
+        .chat-input-bar { padding: 14px; border-top: 1px solid var(--border-color); display: flex; gap: 10px; background: rgba(15, 23, 42, 0.8); }
+        .chat-input-field { flex-grow: 1; background: rgba(3,7,18,0.6); border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; padding: 10px 14px; color: #fff; font-size: 0.82rem; outline: none; }
+        .chat-input-field:focus { border-color: var(--brand-primary); }
+
+        /* Toast Notifications */
+        .toast-container { position: fixed; top: 24px; left: 50%; transform: translateX(-50%); z-index: 30000; display: flex; flex-direction: column; gap: 10px; width: calc(100% - 40px); max-width: 380px; }
+        .toast-popup {
+            background: rgba(15, 23, 42, 0.95); backdrop-filter: blur(16px); border: 1px solid rgba(255,255,255,0.15);
+            padding: 12px 20px; border-radius: var(--radius-round); color: #ffffff; font-size: 0.8rem; font-weight: 600;
+            z-index: 9999; display: flex; align-items: center; gap: 10px; box-shadow: var(--card-shadow);
+            transform: translateY(-40px); opacity: 0; transition: all 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        .toast-popup.active { transform: translateY(0); opacity: 1; }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <div class="glow-orb orb-1"></div>
+        <div class="glow-orb orb-2"></div>
+        <div class="glow-orb orb-3"></div>
+
+        <header class="app-header">
+            <button class="btn-back-round" onclick="window.location.href='services.html'" title="Back to Services">
+                <i class="fas fa-chevron-left"></i>
+            </button>
+            <h1 class="header-title">Booking & Tracking</h1>
+            <span class="step-badge"><i class="fas fa-satellite" style="margin-right: 4px;"></i> Live Tracking</span>
+        </header>
+
+        <div class="section-padding" style="padding-bottom: 0;">
+            <div class="action-portal-card" onclick="window.location.href='services.html'">
+                <div class="portal-text-group">
+                    <h3 id="portalUserWelcome">Loading Profile...</h3>
+                    <p>Tap to explore all services and offers</p>
+                </div>
+                <div class="portal-arrow-circle">
+                    <i class="fas fa-compass"></i>
+                </div>
+            </div>
+        </div>
+
+        <div class="section-padding" style="padding-top: 0; padding-bottom: 0;">
+            <div class="glass-card" id="checkoutCard" style="display: none;">
+                <div class="section-title-row">
+                    <h2 class="section-title">
+                        <i class="fas fa-bag-shopping" style="color: var(--brand-glow-gold);"></i> Selected Services
+                    </h2>
+                </div>
+                
+                <div class="cart-list" id="cartListItems"></div>
+
+                <div class="breakdown-row">
+                    <span>Subtotal</span>
+                    <span id="txtSubtotal">₹0.00</span>
+                </div>
+                <div class="breakdown-row">
+                    <span>Convenience Fee</span>
+                    <span>₹29.00</span>
+                </div>
+                <div class="breakdown-row discount" id="discountRow">
+                    <span>Coupon Discount</span>
+                    <span id="txtDiscount">-₹0.00</span>
+                </div>
+                
+                <div class="divider"></div>
+                
+                <div class="total-row">
+                    <span>Grand Total</span>
+                    <span class="total-price" id="txtGrandTotal">₹0.00</span>
+                </div>
+
+                <div class="promo-wrapper">
+                    <input type="text" id="promoInput" class="promo-input" placeholder="Enter coupon code (e.g. GHARSEVA100)">
+                    <button class="btn-promo-apply" onclick="applyDiscount()">Apply</button>
+                </div>
+            </div>
+
+            <div class="glass-card" id="emptyCartState" style="display: none;">
+                <div class="cart-empty-state">
+                    <i class="fas fa-box-open cart-icon-glowing"></i>
+                    <h3 style="font-size: 1rem; font-weight: 800; margin-bottom: 4px;">Your Cart is Empty</h3>
+                    <p style="font-size: 0.75rem; color: var(--text-muted);">You haven't added any services to your cart yet.</p>
+                    <a href="services.html" class="btn-primary-action" style="margin-top:16px; text-decoration:none;">
+                        <i class="fas fa-plus-circle"></i> Browse Services
+                    </a>
+                </div>
+            </div>
+
+            <div class="glass-card" id="billingFormCard" style="display: none;">
+                <div class="section-title-row">
+                    <h2 class="section-title">
+                        <i class="fas fa-sliders" style="color: var(--brand-glow-orange);"></i> Booking Details
+                    </h2>
+                </div>
+                <form id="bookingCheckoutForm" onsubmit="event.preventDefault(); executeBooking();">
+                    <div class="form-group">
+                        <label>Full Name</label>
+                        <input type="text" id="custName" class="form-control" placeholder="Enter your full name" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Phone Number</label>
+                        <input type="tel" id="custPhone" class="form-control" placeholder="10-digit mobile number" required pattern="[0-9]{10}">
+                    </div>
+                    <div class="form-group">
+                        <label>Preferred Date & Time</label>
+                        <input type="datetime-local" id="scheduledSlot" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Service Address</label>
+                        <textarea id="custAddress" class="form-control" placeholder="Enter your complete home or work address..." required></textarea>
+                    </div>
+                    <button type="submit" class="btn-checkout-confirm" id="btnExecuteBooking">
+                        <span>Confirm & Schedule Booking</span> <i class="fas fa-shield-check"></i>
+                    </button>
+                </form>
+            </div>
+        </div>
+
+        <div class="section-padding" style="padding-top: 10px;">
+            <div class="section-title-row" style="margin-bottom: 16px;">
+                <h2 class="section-title">
+                    <i class="fas fa-tower-cell" style="color: var(--brand-success);"></i> Live Order Tracking
+                </h2>
+                <div class="sync-indicator">
+                    <div class="sync-dot"></div> <span>LIVE UPDATES</span>
+                </div>
+            </div>
+
+            <div class="search-wrapper">
+                <i class="fas fa-magnifying-glass search-icon-decor"></i>
+                <input type="text" id="custSearch" class="search-control" placeholder="Search by name, address, or service..." oninput="handleSearch(this.value)">
+            </div>
+
+            <div class="filter-ribbon">
+                <button class="filter-chip active" id="chip-all" onclick="filterHistory('all', this)">
+                    All Bookings <span class="filter-chip-count" id="cnt-all">0</span>
+                </button>
+                <button class="filter-chip" id="chip-Pending" onclick="filterHistory('Pending', this)">
+                    Pending <span class="filter-chip-count" id="cnt-Pending">0</span>
+                </button>
+                <button class="filter-chip" id="chip-Verified" onclick="filterHistory('Verified', this)">
+                    Verified <span class="filter-chip-count" id="cnt-Verified">0</span>
+                </button>
+                <button class="filter-chip" id="chip-Transit" onclick="filterHistory('Technician Sent', this)">
+                    In-Transit <span class="filter-chip-count" id="cnt-Transit">0</span>
+                </button>
+                <button class="filter-chip" id="chip-Completed" onclick="filterHistory('Completed', this)">
+                    Completed <span class="filter-chip-count" id="cnt-Completed">0</span>
+                </button>
+            </div>
+
+            <div class="feed-container" id="bookingFeedContainer"></div>
+        </div>
+    </div>
+
+    <div class="success-overlay" id="successScreenWindow">
+        <div class="success-window">
+            <div class="success-checkmark-glow">
+                <i class="fas fa-check"></i>
+            </div>
+            <h2 style="font-size: 1.4rem; font-weight: 800; color: #ffffff; margin-bottom: 8px;">Booking Confirmed!</h2>
+            <p style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 24px;" id="successModalInvoiceNarrative">
+                Your service booking request has been successfully placed.
+            </p>
+            <button class="btn-primary-action" style="width: 100%; margin-top: 0;" onclick="closeSuccessAndRefresh()">
+                <i class="fas fa-gauge-high"></i> View My Bookings
+            </button>
+        </div>
+    </div>
+
+    <div class="modal-backdrop" id="confirmBackdrop">
+        <div class="modal-box">
+            <h3 class="modal-title"><i class="fas fa-triangle-exclamation" style="color:var(--brand-danger); margin-right:6px;"></i> Cancel Booking</h3>
+            <p class="modal-desc">Are you sure you want to cancel this booking? This action cannot be undone.</p>
+            <div class="modal-btn-row">
+                <button class="btn-promo-apply" style="margin: 0; background: rgba(255,255,255,0.04);" onclick="closeConfirmModal()">Keep Booking</button>
+                <button class="btn-primary-action" style="margin: 0; background: var(--brand-danger); box-shadow: none;" id="btnConfirmCancellation">Confirm Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="chat-drawer-overlay" id="chatOverlay" onclick="closeChatSupport()"></div>
+    <div class="chat-container-box" id="chatSupportBox">
+        <div class="chat-header">
+            <div style="display:flex; align-items:center; gap:10px;">
+                <div class="sync-dot" style="background-color:var(--brand-primary);"></div>
+                <div>
+                    <h4 style="font-size:0.88rem; font-weight:800; color:#fff;" id="chatHeaderTitle">GharSeva Smart Support</h4>
+                    <p style="font-size:0.68rem; color:var(--text-muted);">Real-time booking assistant</p>
+                </div>
+            </div>
+            <button class="btn-back-round" style="width:32px; height:32px; font-size:0.75rem;" onclick="closeChatSupport()">
+                <i class="fas fa-xmark"></i>
+            </button>
+        </div>
+        
+        <div class="chat-logs-area" id="chatMessagesDump"></div>
+
+        <div class="chat-input-bar">
+            <input type="text" id="chatTextIn" class="chat-input-field" placeholder="Type your message here..." onkeydown="if(event.key==='Enter') sendChatMessage()">
+            <button class="btn-back-round" style="border-radius:12px; width:40px; height:40px; background:var(--brand-primary); color:#fff; border:none;" onclick="sendChatMessage()">
+                <i class="fas fa-paper-plane"></i>
+            </button>
+        </div>
+    </div>
+
+    <div class="toast-container" id="toastContainer"></div>
+
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+    import { getFirestore, collection, addDoc, onSnapshot, query, where, doc, updateDoc, getDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+    const firebaseConfig = {
+        apiKey: "AIzaSyBfmm4RSOckkFvAFMWrTPuF38koEz2kAkE",
+        authDomain: "yukti-247.firebaseapp.com",
+        databaseURL: "https://yukti-247-default-rtdb.firebaseio.com",
+        projectId: "yukti-247",
+        storageBucket: "yukti-247.firebasestorage.app",
+        messagingSenderId: "244123454826",
+        appId: "1:244123454826:web:56b4d88c3628bb06cfa913",
+        measurementId: "G-6BGFCBKTD7"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+
+    let currentUserSession = null;
+    let selectedServices = [];
+    let discountApplied = 0;
+    let appliedPromoCode = "";
+    let cachedBookings = [];
+    let activeFilter = 'all';
+    let searchQuery = '';
+    let targetCancellationId = null;
+    let activeSupportBooking = null;
+
+    function setupDateConstraints() {
+        const dateControl = document.getElementById('scheduledSlot');
+        if (dateControl) {
+            const now = new Date();
+            now.setMinutes(now.getMinutes() - now.getTimezoneOffset());
+            dateControl.min = now.toISOString().slice(0, 16);
+        }
+    }
+
+    function loadCheckoutData() {
+        const stored = localStorage.getItem('selectedGharSevaServices');
+        const checkoutCard = document.getElementById('checkoutCard');
+        const billingFormCard = document.getElementById('billingFormCard');
+        const emptyStateCard = document.getElementById('emptyCartState');
+
+        if (stored) {
+            try { selectedServices = JSON.parse(stored); } catch(e) { selectedServices = []; }
+        } else {
+            selectedServices = [];
+        }
+
+        if (selectedServices.length === 0) {
+            if (checkoutCard) checkoutCard.style.display = 'none';
+            if (billingFormCard) billingFormCard.style.display = 'none';
+            if (emptyStateCard) emptyStateCard.style.display = 'block';
+        } else {
+            if (checkoutCard) checkoutCard.style.display = 'block';
+            if (billingFormCard) billingFormCard.style.display = 'block';
+            if (emptyStateCard) emptyStateCard.style.display = 'none';
+            
+            renderCart();
+            calculateBill();
+        }
+    }
+
+    function renderCart() {
+        const container = document.getElementById('cartListItems');
+        if(!container) return;
+        container.innerHTML = "";
+        
+        selectedServices.forEach((item, index) => {
+            const div = document.createElement('div');
+            div.className = 'cart-item';
+            div.innerHTML = `
+                <span class="cart-item-name">${item.name || 'GharSeva Service'}</span>
+                <div class="cart-item-meta">
+                    <span class="cart-item-price">₹${item.price || 0}</span>
+                    <button class="btn-remove-item" onclick="removeCheckoutItem(${index})" title="Remove item">
+                        <i class="far fa-trash-can"></i>
+                    </button>
+                </div>
+            `;
+            container.appendChild(div);
+        });
+    }
+
+    function removeCheckoutItem(index) {
+        selectedServices.splice(index, 1);
+        localStorage.setItem('selectedGharSevaServices', JSON.stringify(selectedServices));
+        showToast("Item removed from cart.");
+        loadCheckoutData();
+    }
+
+    function applyDiscount() {
+        const input = document.getElementById('promoInput');
+        if(!input) return;
+        const token = input.value.trim().toUpperCase();
+        
+        if(token === "GHARSEVA100") {
+            discountApplied = 100;
+            appliedPromoCode = token;
+            showToast("Coupon applied: ₹100 Discount!");
+            document.getElementById('discountRow').style.display = 'flex';
+        } else if(token === "") {
+            showToast("Please enter a coupon code.", false);
+        } else {
+            showToast("Invalid coupon code.", false);
+            discountApplied = 0;
+            appliedPromoCode = "";
+            document.getElementById('discountRow').style.display = 'none';
+        }
+        calculateBill();
+    }
+
+    function calculateBill() {
+        const subtotal = selectedServices.reduce((sum, item) => sum + (parseFloat(item.price) || 0), 0);
+        const grandTotal = Math.max(0, subtotal + 29 - discountApplied);
+
+        const subtotalEl = document.getElementById('txtSubtotal');
+        const discountEl = document.getElementById('txtDiscount');
+        const grandTotalEl = document.getElementById('txtGrandTotal');
+
+        if (subtotalEl) subtotalEl.innerText = `₹${subtotal.toFixed(2)}`;
+        if (discountEl) discountEl.innerText = `-₹${discountApplied.toFixed(2)}`;
+        if (grandTotalEl) grandTotalEl.innerText = `₹${grandTotal.toFixed(2)}`;
+    }
+
+    async function executeBooking() {
+        if (!currentUserSession) {
+            showToast("Please log in to continue.", false);
+            return;
+        }
+
+        const btn = document.getElementById('btnExecuteBooking');
+        btn.disabled = true;
+        btn.innerHTML = `<i class="fas fa-spinner fa-spin"></i> Processing Booking...`;
+
+        const name = document.getElementById('custName').value.trim();
+        const phone = document.getElementById('custPhone').value.trim();
+        const slot = document.getElementById('scheduledSlot').value;
+        const addr = document.getElementById('custAddress').value.trim();
+
+        const subtotal = selectedServices.reduce((sum, item) => sum + (parseFloat(item.price) || 0), 0);
+        const grandTotal = Math.max(0, subtotal + 29 - discountApplied);
+
+        const securePinToken = String(Math.floor(1000 + Math.random() * 9000));
+
+        const payloadPacket = {
+            userId: currentUserSession.uid, 
+            customerName: name,
+            customerPhone: phone,
+            scheduledSlot: slot,
+            customerAddress: addr,
+            services: selectedServices,
+            subtotal: subtotal,
+            discount: discountApplied,
+            promoCode: appliedPromoCode,
+            grandTotal: grandTotal,
+            status: "Pending",
+            verificationPin: securePinToken,
+            createdAt: new Date().toISOString()
+        };
+
+        try {
+            const collectionRef = collection(db, "bookings");
+            await addDoc(collectionRef, payloadPacket);
+            
+            const invoiceDump = document.getElementById('successModalInvoiceNarrative');
+            if (invoiceDump) {
+                invoiceDump.innerHTML = `
+                    Your booking request has been safely saved.<br>
+                    <div style="background:rgba(255,255,255,0.04); border-radius:12px; padding:12px; margin:14px 0; font-size:0.75rem; text-align:left; border:1px solid rgba(255,255,255,0.08);">
+                        <div style="display:flex; justify-content:space-between;"><span>Total Services:</span><span>${selectedServices.length}</span></div>
+                        <div style="display:flex; justify-content:space-between; font-weight:800; margin-top:6px; color:var(--brand-success); font-size:0.85rem;"><span>Total Amount:</span><span>₹${grandTotal.toFixed(2)}</span></div>
+                    </div>
+                    Payment will be collected after service completion.
+                `;
+            }
+            
+            localStorage.removeItem('selectedGharSevaServices');
+            document.getElementById('successScreenWindow').classList.add('active');
+        } catch(e) {
+            console.error("Booking write error: ", e);
+            showToast("Failed to place booking. Please try again.", false);
+        } finally {
+            btn.disabled = false;
+            btn.innerHTML = `<span>Confirm & Schedule Booking</span> <i class="fas fa-shield-check"></i>`;
+        }
+    }
+
+    function closeSuccessAndRefresh() {
+        document.getElementById('successScreenWindow').classList.remove('active');
+        loadCheckoutData();
+    }
+
+    function initRealtimeSync(user) {
+        const feedContainer = document.getElementById('bookingFeedContainer');
+        if(!feedContainer) return;
+
+        const syncQuery = query(
+            collection(db, "bookings"),
+            where("userId", "==", user.uid)
+        );
+
+        onSnapshot(syncQuery, (snapshot) => {
+            cachedBookings = [];
+            snapshot.forEach((doc) => {
+                cachedBookings.push({ id: doc.id, ...doc.data() });
+            });
+
+            cachedBookings.sort((a, b) => new Date(b.createdAt || 0) - new Date(a.createdAt || 0));
+            recalculateFilterCounts();
+            renderFeed();
+        }, (error) => {
+            console.error("Snapshot error vector intercepted: ", error);
+            showToast("Connection lost. Retrying sync...", false);
+        });
+    }
+
+    function recalculateFilterCounts() {
+        const counts = { all: cachedBookings.length, Pending: 0, Verified: 0, 'Technician Sent': 0, Completed: 0 };
+        
+        cachedBookings.forEach(b => {
+            let currentStat = b.status;
+            if (currentStat === "In-Transit") currentStat = "Technician Sent";
+            if(counts[currentStat] !== undefined) counts[currentStat]++;
+        });
+
+        const cntAll = document.getElementById('cnt-all');
+        const cntPending = document.getElementById('cnt-Pending');
+        const cntVerified = document.getElementById('cnt-Verified');
+        const cntTransit = document.getElementById('cnt-Transit');
+        const cntCompleted = document.getElementById('cnt-Completed');
+
+        if(cntAll) cntAll.innerText = counts.all;
+        if(cntPending) cntPending.innerText = counts.Pending;
+        if(cntVerified) cntVerified.innerText = counts.Verified;
+        if(cntTransit) cntTransit.innerText = counts['Technician Sent'];
+        if(cntCompleted) cntCompleted.innerText = counts.Completed;
+    }
+
+    function filterHistory(status, element) {
+        activeFilter = status;
+        document.querySelectorAll('.filter-chip').forEach(btn => btn.classList.remove('active'));
+        if(element) element.classList.add('active');
+        renderFeed();
+    }
+
+    function handleSearch(val) {
+        searchQuery = val.trim().toLowerCase();
+        renderFeed();
+    }
+
+    function renderFeed() {
+        const listAnchor = document.getElementById('bookingFeedContainer');
+        if (!listAnchor) return;
+
+        let filtered = cachedBookings;
+
+        if (activeFilter !== 'all') {
+            filtered = filtered.filter(b => {
+                if (activeFilter === "Technician Sent") {
+                    return b.status === "Technician Sent" || b.status === "In-Transit";
+                }
+                return b.status === activeFilter;
+            });
+        }
+
+        if (searchQuery !== '') {
+            filtered = filtered.filter(b => 
+                (b.customerName && b.customerName.toLowerCase().includes(searchQuery)) ||
+                (b.customerAddress && b.customerAddress.toLowerCase().includes(searchQuery)) ||
+                (b.services && b.services.some(s => s.name.toLowerCase().includes(searchQuery))) ||
+                (b.id && b.id.toLowerCase().includes(searchQuery))
+            );
+        }
+
+        if (filtered.length === 0) {
+            listAnchor.innerHTML = `
+                <div style="text-align:center; padding: 40px 10px; color: var(--text-muted); font-size: 0.8rem;">
+                    <i class="fas fa-folder-open" style="font-size:2.2rem; margin-bottom:12px; display:block; opacity:0.3; color:var(--brand-primary);"></i>
+                    No bookings match your search.
+                </div>
+            `;
+            return;
+        }
+
+        let htmlPayload = "";
+        filtered.forEach((item) => {
+            let bookedTime = item.createdAt ? new Date(item.createdAt).toLocaleString('en-IN') : "Just Now";
+            let scheduledTime = item.scheduledSlot ? new Date(item.scheduledSlot).toLocaleString('en-IN') : "Awaiting Schedule";
+            
+            let statusClass = "badge-pending";
+            let fillPercent = "5%";
+            let stepNodes = ["active", "", "", ""];
+            let isPulseActive = false;
+
+            if (item.status === "Verified") {
+                statusClass = "badge-verified";
+                fillPercent = "33%";
+                stepNodes = ["completed", "active", "", ""];
+                isPulseActive = true;
+            } else if (item.status === "Technician Sent" || item.status === "In-Transit") {
+                statusClass = "badge-transit";
+                fillPercent = "66%";
+                stepNodes = ["completed", "completed", "active", ""];
+                isPulseActive = true;
+            } else if (item.status === "Completed") {
+                statusClass = "badge-completed";
+                fillPercent = "100%";
+                stepNodes = ["completed", "completed", "completed", "completed"];
+            } else if (item.status === "Cancelled") {
+                statusClass = "badge-cancelled";
+                fillPercent = "0%";
+                stepNodes = ["", "", "", ""];
+            } else {
+                isPulseActive = true;
+            }
+
+            const namesString = item.services ? item.services.map(s => s.name).join(', ') : 'Custom Service Request';
+            const verificationOtp = item.verificationPin || item.otp || Math.abs(item.id.split("").reduce((a,b)=>{a=((a<<5)-a)+b.charCodeAt(0);return a&a},0) % 9000 + 1000);
+
+            htmlPayload += `
+                <div class="tracking-card ${isPulseActive ? 'pulse-active' : ''}" onclick="toggleAccordion(this)">
+                    <div class="card-top-header">
+                        <span class="card-service-title">${namesString}</span>
+                        <span class="status-badge ${statusClass}">
+                            <i class="fas ${item.status==='Completed'?'fa-check-circle':item.status==='Cancelled'?'fa-ban':item.status==='Verified'?'fa-shield-halved':item.status==='Technician Sent' || item.status==='In-Transit'?'fa-truck-fast':'fa-clock'}"></i>
+                            ${item.status}
+                        </span>
+                    </div>
+                    
+                    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 8px;">
+                        <div class="card-price-matrix">₹${(item.grandTotal || 0).toFixed(2)}</div>
+                        <div style="font-size:0.65rem; color:var(--text-muted); background:rgba(255,255,255,0.04); padding:3px 10px; border-radius:8px; border:1px solid rgba(255,255,255,0.06);" onclick="event.stopPropagation(); navigator.clipboard.writeText('${item.id}'); showToast('Booking ID copied');">
+                            ID: ${item.id.substring(0,8)}... <i class="far fa-copy" style="font-size:0.6rem; margin-left:3px;"></i>
+                        </div>
+                    </div>
+                    
+                    <div class="tracking-progress-wrapper">
+                        <div class="progress-line-back"></div>
+                        <div class="progress-line-fill" style="width: ${fillPercent};"></div>
+                        
+                        <div class="progress-step-node ${stepNodes[0]}" title="Order Placed">
+                            <i class="fas fa-file-invoice"></i>
+                        </div>
+                        
+                        <div class="progress-step-node ${stepNodes[1]}" title="Verified">
+                            <i class="fas fa-shield-halved"></i>
+                        </div>
+                        
+                        <div class="progress-step-node ${stepNodes[2]}" title="In-Transit">
+                            <i class="fas fa-truck-fast"></i>
+                        </div>
+                        
+                        <div class="progress-step-node ${stepNodes[3]}" title="Completed">
+                            <i class="fas fa-circle-check"></i>
+                        </div>
+                    </div>
+
+                    ${item.status === "Technician Sent" || item.status === "In-Transit" ? `
+                        <div style="background: rgba(16, 185, 129, 0.08); border: 1px dashed var(--brand-success); padding: 10px 14px; border-radius: 12px; margin-top: 14px; display: flex; align-items: center; justify-content: space-between; animation: slideIn 0.3s ease;">
+                            <div style="font-size: 0.75rem; color: #cbd5e1; font-weight: 600;">
+                                <i class="fas fa-key" style="color: var(--brand-success); margin-right: 6px;"></i> Share OTP with technician upon arrival:
+                            </div>
+                            <div style="font-size: 1.05rem; font-weight: 800; color: #ffffff; letter-spacing: 3px; background: rgba(0,0,0,0.4); padding: 4px 12px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.08);">
+                                ${verificationOtp}
+                            </div>
+                        </div>
+                    ` : ''}
+
+                    <div class="card-interactive-row">
+                        <span><i class="far fa-clock" style="margin-right:4px;"></i> Scheduled: ${scheduledTime.split(',')[0]}</span>
+                        <i class="fas fa-chevron-down chevron-icon"></i>
+                    </div>
+
+                    <div class="card-details-drawer">
+                        <div class="drawer-content" onclick="event.stopPropagation();">
+                            <div class="detail-row" style="margin-top:4px;">
+                                <i class="far fa-calendar-alt" style="color: var(--brand-glow-orange);"></i>
+                                <span><strong>Booked On:</strong> ${bookedTime}</span>
+                            </div>
+                            <div class="detail-row">
+                                <i class="far fa-clock" style="color: var(--brand-glow-orange);"></i>
+                                <span><strong>Service Time Slot:</strong> ${scheduledTime}</span>
+                            </div>
+                            <div class="detail-row" style="justify-content: space-between; gap: 6px;">
+                                <div style="display:flex; align-items:center; gap:8px; overflow:hidden; width:85%;">
+                                    <i class="fas fa-location-dot" style="color: var(--brand-primary); flex-shrink:0;"></i>
+                                    <span style="white-space: nowrap; overflow:hidden; text-overflow:ellipsis; font-size:0.75rem;">
+                                        <strong>Address:</strong> ${item.customerAddress || 'N/A'}
+                                    </span>
+                                </div>
+                                <button class="action-icon-btn" onclick="copyAddressText('${item.customerAddress ? item.customerAddress.replace(/'/g, "\\'") : ''}')">
+                                    <i class="far fa-copy"></i>
+                                </button>
+                            </div>
+
+                            <div class="drawer-button-grid">
+                                <button class="btn-drawer-action chat-trigger" onclick="triggerChatSupport('${item.id}')">
+                                    <i class="far fa-comment-dots"></i> Support Chat
+                                </button>
+                                ${item.status !== 'Cancelled' && item.status !== 'Completed' ? `
+                                    <button class="btn-drawer-action cancel-trigger" onclick="triggerCancellation('${item.id}')">
+                                        <i class="fas fa-ban"></i> Cancel Booking
+                                    </button>
+                                ` : `
+                                    <button class="btn-drawer-action" style="opacity:0.4; cursor:not-allowed;" disabled>
+                                        <i class="fas fa-lock"></i> Locked State
+                                    </button>
+                                `}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        });
+        listAnchor.innerHTML = htmlPayload;
+    }
+
+    function toggleAccordion(cardElement) {
+        const wasActive = cardElement.classList.contains('active');
+        document.querySelectorAll('.tracking-card').forEach(c => c.classList.remove('active'));
+        if (!wasActive) cardElement.classList.add('active');
+    }
+
+    function copyAddressText(text) {
+        if(!text) return;
+        navigator.clipboard.writeText(text).then(() => {
+            showToast("Address copied to clipboard.");
+        }).catch(() => {
+            showToast("Unable to copy address.", false);
+        });
+    }
+
+    function triggerCancellation(bookingId) {
+        targetCancellationId = bookingId;
+        const confirmBackdrop = document.getElementById('confirmBackdrop');
+        if (confirmBackdrop) confirmBackdrop.classList.add('active');
+    }
+
+    function closeConfirmModal() {
+        const confirmBackdrop = document.getElementById('confirmBackdrop');
+        if (confirmBackdrop) confirmBackdrop.classList.remove('active');
+        targetCancellationId = null;
+    }
+
+    const btnConfirmCancel = document.getElementById('btnConfirmCancellation');
+    if (btnConfirmCancel) {
+        btnConfirmCancel.addEventListener('click', async () => {
+            if (targetCancellationId) {
+                try {
+                    const reference = doc(db, "bookings", targetCancellationId);
+                    await updateDoc(reference, { status: "Cancelled" });
+                    closeConfirmModal();
+                    showToast("Booking cancelled successfully.");
+                } catch(e) {
+                    showToast("Failed to cancel booking. Please try again.", false);
+                }
+            }
+        });
+    }
+
+    function triggerChatSupport(bookingId) {
+        activeSupportBooking = cachedBookings.find(b => b.id === bookingId);
+        if(!activeSupportBooking) return;
+
+        const headerTitle = document.getElementById('chatHeaderTitle');
+        if(headerTitle) headerTitle.innerText = `Support: Booking #${activeSupportBooking.id.substring(0, 8)}`;
+        
+        const dump = document.getElementById('chatMessagesDump');
+        if(!dump) return;
+        dump.innerHTML = "";
+
+        const names = activeSupportBooking.services ? activeSupportBooking.services.map(s => s.name).join(', ') : 'Request';
+        const greet = document.createElement('div');
+        greet.className = 'chat-bubble agent';
+        greet.innerHTML = `
+            👋 Hello! I am your <strong>GharSeva Assistant</strong>.<br><br>
+            I can help you with your booking for <strong>${names}</strong>.<br>
+            Current Status: <strong>${activeSupportBooking.status.toUpperCase()}</strong>.<br><br>
+            How can I assist you with technician assignment, scheduling, or payments today?
+        `;
+        dump.appendChild(greet);
+
+        const chatOverlay = document.getElementById('chatOverlay');
+        const chatBox = document.getElementById('chatSupportBox');
+        if (chatOverlay) chatOverlay.classList.add('active');
+        if (chatBox) chatBox.classList.add('active');
+    }
+
+    function closeChatSupport() {
+        const chatOverlay = document.getElementById('chatOverlay');
+        const chatBox = document.getElementById('chatSupportBox');
+        if (chatOverlay) chatOverlay.classList.remove('active');
+        if (chatBox) chatBox.classList.remove('active');
+        activeSupportBooking = null;
+    }
+
+    // ADVANCED AI CHAT INTELLIGENCE SYSTEM
+    function sendChatMessage() {
+        const input = document.getElementById('chatTextIn');
+        if(!input) return;
+        const messageText = input.value.trim();
+        if(messageText === "") return;
+
+        const dump = document.getElementById('chatMessagesDump');
+        if(!dump) return;
+        
+        // Render User Message
+        const userBubble = document.createElement('div');
+        userBubble.className = 'chat-bubble client';
+        userBubble.innerText = messageText;
+        dump.appendChild(userBubble);
+        
+        input.value = "";
+        dump.scrollTop = dump.scrollHeight;
+
+        if(!activeSupportBooking) return;
+
+        // Render AI Agent Typing Indicator
+        const typingBubble = document.createElement('div');
+        typingBubble.className = 'chat-bubble agent typing';
+        typingBubble.innerHTML = `<i class="fas fa-robot fa-spin" style="margin-right:6px; color:var(--brand-primary);"></i> Typing a response...`;
+        dump.appendChild(typingBubble);
+        dump.scrollTop = dump.scrollHeight;
+
+        // Dynamic Smart Response Generation
+        setTimeout(() => {
+            if(dump.contains(typingBubble)) {
+                dump.removeChild(typingBubble);
+            }
+
+            const agentBubble = document.createElement('div');
+            agentBubble.className = 'chat-bubble agent';
+            
+            const aiResponse = processAiResponse(messageText.toLowerCase(), activeSupportBooking);
+            agentBubble.innerHTML = aiResponse;
+            dump.appendChild(agentBubble);
+            dump.scrollTop = dump.scrollHeight;
+        }, 1200);
+    }
+
+    function processAiResponse(query, booking) {
+        const status = booking.status;
+        const otp = booking.verificationPin || booking.otp || "N/A";
+        const total = (booking.grandTotal || 0).toFixed(2);
+        const targetTime = booking.scheduledSlot ? new Date(booking.scheduledSlot).toLocaleString('en-IN') : 'Unassigned';
+
+        if (query.includes('otp') || query.includes('pin') || query.includes('code') || query.includes('verify')) {
+            if (status === "Technician Sent" || status === "In-Transit") {
+                return `🔑 Your verification OTP is: <strong style="letter-spacing:2px; font-size:1.1rem; color:var(--brand-success);">${otp}</strong>.<br>Please share this code with your technician upon arrival.`;
+            } else {
+                return `🔒 An OTP code will be generated once your technician is on the way. Current status: <strong>${status}</strong>.`;
+            }
+        }
+
+        if (query.includes('cancel') || query.includes('abort') || query.includes('stop')) {
+            if (status === "Cancelled") {
+                return `⚠️ This booking is already <strong>CANCELLED</strong>. No service will be provided.`;
+            }
+            if (status === "Completed") {
+                return `❌ Completed orders cannot be cancelled. If you faced any issues, please contact our support team directly.`;
+            }
+            return `🚨 You can cancel this service by tapping the <strong>"Cancel Booking"</strong> button inside your order card details.`;
+        }
+
+        if (query.includes('time') || query.includes('when') || query.includes('slot') || query.includes('schedule') || query.includes('late') || query.includes('delay')) {
+            return `⏰ <strong>Scheduled Time Slot:</strong> ${targetTime}.<br>Our service professional will reach your location on schedule.`;
+        }
+
+        if (query.includes('pay') || query.includes('price') || query.includes('amount') || query.includes('cost') || query.includes('bill') || query.includes('money')) {
+            return `💳 <strong>Total Amount Due:</strong> ₹${total}.<br>You can pay on-site after service completion using Cash, UPI, or Card.`;
+        }
+
+        if (query.includes('address') || query.includes('location') || query.includes('where')) {
+            return `📍 <strong>Saved Service Address:</strong><br>${booking.customerAddress || 'No address provided.'}`;
+        }
+
+        if (query.includes('technician') || query.includes('guy') || query.includes('person') || query.includes('who') || query.includes('partner')) {
+            if (status === "Pending") {
+                return `🔎 We are assigning a verified technician near your area. You will be updated shortly.`;
+            } else if (status === "Verified") {
+                return `🛡️ Your booking is verified! A service partner is being assigned to your request.`;
+            } else if (status === "Technician Sent" || status === "In-Transit") {
+                return `🚚 Your technician is <strong>ON THE WAY</strong> to your address! Please keep your OTP ready.`;
+            } else if (status === "Completed") {
+                return `✅ Service has been completed successfully by our technician.`;
+            }
+        }
+
+        if (status === "Pending") {
+            return `⚙️ Your booking ID <strong>${booking.id.substring(0,8)}...</strong> is currently <strong>PENDING</strong>. We are matching you with a nearby technician.`;
+        } else if (status === "Cancelled") {
+            return `🛑 This booking has been cancelled.`;
+        } else if (status === "Completed") {
+            return `🎉 Service completed! Thank you for choosing GharSeva.`;
+        }
+
+        return `🤖 Thank you for your message regarding booking <strong>#${booking.id.substring(0,8)}</strong>.<br>A support representative will assist you if further help is needed.`;
+    }
+
+    function showToast(message, isSuccess = true) {
+        const container = document.getElementById('toastContainer');
+        if(!container) return;
+        
+        const toast = document.createElement('div');
+        toast.className = 'toast-popup';
+        
+        const icon = isSuccess ? 'fa-circle-check' : 'fa-triangle-exclamation';
+        const color = isSuccess ? 'var(--brand-success)' : 'var(--brand-danger)';
+        
+        toast.innerHTML = `<i class="fas ${icon}" style="color:${color}"></i><span>${message}</span>`;
+        container.appendChild(toast);
+        
+        setTimeout(() => toast.classList.add('active'), 50);
+        setTimeout(() => {
+            toast.classList.remove('active');
+            setTimeout(() => {
+                if(container.contains(toast)) container.removeChild(toast);
+            }, 400);
+        }, 3200);
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+        setupDateConstraints();
+        loadCheckoutData();
+
+        onAuthStateChanged(auth, async (user) => {
+            if (user) {
+                currentUserSession = user;
+                
+                try {
+                    const userDocRef = doc(db, "users", user.uid);
+                    const userDocSnap = await getDoc(userDocRef);
+                    
+                    const welcomeEl = document.getElementById('portalUserWelcome');
+                    if(userDocSnap.exists()){
+                        const data = userDocSnap.data();
+                        if(welcomeEl) welcomeEl.innerText = `Welcome, ${data.fullName || 'User'}!`;
+                        if(document.getElementById('custName')) {
+                            document.getElementById('custName').value = data.fullName || '';
+                        }
+                    } else {
+                        if(welcomeEl) welcomeEl.innerText = `Welcome to GharSeva`;
+                    }
+                } catch(err) {
+                    const welcomeEl = document.getElementById('portalUserWelcome');
+                    if(welcomeEl) welcomeEl.innerText = `Welcome to GharSeva`;
+                }
+
+                initRealtimeSync(user);
+            } else {
+                showToast("Please log in to view your bookings.", false);
+                setTimeout(() => {
+                    window.location.href = 'auth.html';
+                }, 2000);
+            }
+        });
+
+        setTimeout(() => {
+            document.body.classList.add('page-loaded');
+        }, 100);
+    });
+
+    // Global Export Bindings
+    window.removeCheckoutItem = removeCheckoutItem;
+    window.applyDiscount = applyDiscount;
+    window.executeBooking = executeBooking;
+    window.closeSuccessAndRefresh = closeSuccessAndRefresh;
+    window.handleSearch = handleSearch;
+    window.filterHistory = filterHistory;
+    window.toggleAccordion = toggleAccordion;
+    window.copyAddressText = copyAddressText;
+    window.triggerCancellation = triggerCancellation;
+    window.closeConfirmModal = closeConfirmModal;
+    window.triggerChatSupport = triggerChatSupport;
+    window.closeChatSupport = closeChatSupport;
+    window.sendChatMessage = sendChatMessage;
+    window.showToast = showToast;
+</script>
+</body>
+</html>

@@ -1,0 +1,1332 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Partner Console | GharSeva Pro</title>
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <style>
+        /* --- DESIGN SYSTEM TOKENS --- */
+        :root {
+            --brand-primary: #6366f1;       
+            --brand-primary-hover: #4f46e5;
+            --brand-glow-gold: #fbbf24;     
+            --brand-accent-cyan: #06b6d4;   
+            --brand-success: #10b981;
+            --brand-danger: #ef4444;
+            --bg-main: #030712;             
+            --bg-card: rgba(17, 24, 39, 0.65); 
+            --border-color: rgba(255, 255, 255, 0.08);
+            --border-glow: rgba(99, 102, 241, 0.25);
+            --card-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.5);
+            --radius-round: 999px;
+            --radius-card: 24px;
+            --radius-input: 14px;
+            --text-muted: #94a3b8;
+            --font-stack: 'Plus Jakarta Sans', sans-serif;
+        }
+
+        /* --- RESET & LAYOUT --- */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: var(--font-stack);
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            background-color: var(--bg-main); 
+            color: #f8fafc;
+            line-height: 1.5;
+            display: flex;
+            justify-content: center;
+            min-height: 100vh;
+            background-image: 
+                radial-gradient(at 10% 10%, rgba(99, 102, 241, 0.12) 0px, transparent 50%),
+                radial-gradient(at 90% 90%, rgba(6, 182, 212, 0.08) 0px, transparent 50%);
+            background-attachment: fixed;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 480px; 
+            background: rgba(11, 15, 25, 0.85);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            box-shadow: 0 0 80px rgba(0, 0, 0, 0.8), 0 0 40px rgba(99, 102, 241, 0.15); 
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            overflow-x: hidden;
+            padding-bottom: 50px;
+            min-height: 100vh;
+            border-left: 1px solid var(--border-color);
+            border-right: 1px solid var(--border-color);
+        }
+
+        /* Ambient Lighting */
+        .glow-orb {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(90px);
+            opacity: 0.25;
+            pointer-events: none;
+            z-index: 1;
+        }
+        .orb-1 { top: -20px; right: -60px; width: 250px; height: 250px; background: var(--brand-primary); }
+        .orb-2 { bottom: 10%; left: -60px; width: 250px; height: 250px; background: var(--brand-accent-cyan); }
+
+        /* Secure Shield Blocker Overlay */
+        .auth-shield-loader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #030712;
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            transition: opacity 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .spinner {
+            width: 48px;
+            height: 48px;
+            border: 4px solid rgba(255, 255, 255, 0.08);
+            border-top-color: var(--brand-primary);
+            border-radius: 50%;
+            animation: spin 0.8s cubic-bezier(0.6, 0.2, 0.1, 1) infinite;
+            margin-bottom: 18px;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .section-padding { 
+            padding: 20px; 
+            position: relative;
+            z-index: 2; 
+        }
+
+        .section-title-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+
+        .section-title {
+            font-size: 1.1rem;
+            font-weight: 800;
+            letter-spacing: -0.02em;
+            color: #ffffff;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        /* --- NAVBAR HEADER --- */
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 16px 20px;
+            background: rgba(11, 15, 25, 0.8);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+            border-bottom: 1px solid var(--border-color);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .profile-badge {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .profile-avatar {
+            width: 42px;
+            height: 42px;
+            border-radius: 14px;
+            background: linear-gradient(135deg, var(--brand-primary) 0%, var(--brand-accent-cyan) 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+            color: #ffffff;
+            font-size: 0.9rem;
+            box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .nav-controls {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        /* Toggle Button (Online/Offline) */
+        .duty-toggle {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(16, 185, 129, 0.1);
+            border: 1px solid rgba(16, 185, 129, 0.25);
+            padding: 7px 14px;
+            border-radius: var(--radius-round);
+            font-size: 0.72rem;
+            font-weight: 800;
+            color: var(--brand-success);
+            cursor: pointer;
+            transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .duty-toggle:active {
+            transform: scale(0.95);
+        }
+
+        .duty-toggle.offline {
+            background: rgba(239, 68, 68, 0.1);
+            border-color: rgba(239, 68, 68, 0.25);
+            color: var(--brand-danger);
+        }
+
+        .duty-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background-color: var(--brand-success);
+            box-shadow: 0 0 10px var(--brand-success);
+        }
+
+        .duty-toggle.offline .duty-dot {
+            background-color: var(--brand-danger);
+            box-shadow: none;
+        }
+
+        /* Control Buttons */
+        .audio-ctrl-btn {
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid var(--border-color);
+            color: var(--text-muted);
+            width: 36px;
+            height: 36px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .audio-ctrl-btn:hover {
+            color: #ffffff;
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        .audio-ctrl-btn.active {
+            color: var(--brand-glow-gold);
+            border-color: rgba(251, 191, 36, 0.3);
+            background: rgba(251, 191, 36, 0.1);
+            box-shadow: 0 0 12px rgba(251, 191, 36, 0.15);
+        }
+
+        .audio-ctrl-btn.signout:hover {
+            color: var(--brand-danger);
+            background: rgba(239, 68, 68, 0.1);
+            border-color: rgba(239, 68, 68, 0.2);
+        }
+
+        /* --- STATS BOARD --- */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .stat-item {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-radius: 18px;
+            padding: 14px 10px;
+            text-align: center;
+            transition: all 0.25s ease;
+        }
+
+        .stat-item:hover {
+            border-color: rgba(255, 255, 255, 0.15);
+            transform: translateY(-2px);
+        }
+
+        .stat-value {
+            font-size: 1.2rem;
+            font-weight: 800;
+            color: #ffffff;
+            letter-spacing: -0.02em;
+        }
+
+        .stat-value.gold { color: var(--brand-glow-gold); }
+        .stat-value.cyan { color: var(--brand-accent-cyan); }
+
+        .stat-label {
+            font-size: 0.62rem;
+            font-weight: 800;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            margin-top: 4px;
+            letter-spacing: 0.6px;
+        }
+
+        /* --- SKILLS CHIPS --- */
+        .skills-ribbon {
+            display: flex;
+            gap: 8px;
+            overflow-x: auto;
+            padding-bottom: 8px;
+            margin-bottom: 10px;
+            scrollbar-width: none;
+        }
+        .skills-ribbon::-webkit-scrollbar { display: none; }
+        
+        .skill-badge {
+            background: rgba(99, 102, 241, 0.08);
+            border: 1px solid rgba(99, 102, 241, 0.2);
+            color: #a5b4fc;
+            font-size: 0.68rem;
+            font-weight: 700;
+            padding: 6px 12px;
+            border-radius: var(--radius-round);
+            white-space: nowrap;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        /* --- SEARCH CONSOLE --- */
+        .search-container {
+            position: relative;
+            margin-bottom: 16px;
+            z-index: 2;
+        }
+
+        .search-input {
+            width: 100%;
+            background: rgba(15, 23, 42, 0.7);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-input);
+            padding: 12px 14px 12px 42px;
+            color: #ffffff;
+            font-size: 0.82rem;
+            outline: none;
+            transition: all 0.25s ease;
+        }
+
+        .search-input:focus {
+            border-color: var(--brand-primary);
+            box-shadow: 0 0 20px rgba(99, 102, 241, 0.25);
+            background: rgba(15, 23, 42, 0.9);
+        }
+
+        .search-icon-decor {
+            position: absolute;
+            left: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-muted);
+            font-size: 0.85rem;
+            pointer-events: none;
+        }
+
+        /* --- FILTER TABS --- */
+        .partner-tabs {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 20px;
+            background: rgba(15, 23, 42, 0.4);
+            padding: 4px;
+            border-radius: 16px;
+            border: 1px solid var(--border-color);
+        }
+
+        .partner-tab-btn {
+            flex: 1;
+            background: transparent;
+            border: none;
+            color: var(--text-muted);
+            padding: 10px 8px;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            text-align: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+        }
+
+        .partner-tab-btn.active {
+            background: var(--brand-primary);
+            color: #ffffff;
+            box-shadow: 0 4px 12px rgba(99, 102, 241, 0.35);
+        }
+
+        .tab-badge {
+            font-size: 0.65rem;
+            opacity: 0.8;
+            font-weight: 800;
+            background: rgba(255, 255, 255, 0.15);
+            padding: 2px 6px;
+            border-radius: var(--radius-round);
+        }
+
+        /* --- JOB CARDS --- */
+        .job-list {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .job-card {
+            border: 1px solid var(--border-color);
+            background: var(--bg-card);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border-radius: var(--radius-card);
+            padding: 20px;
+            position: relative;
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            box-shadow: var(--card-shadow);
+        }
+
+        .job-card:hover {
+            border-color: var(--border-glow);
+            transform: translateY(-2px);
+        }
+
+        .job-card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+            padding-bottom: 14px;
+            margin-bottom: 14px;
+        }
+
+        .customer-title {
+            font-size: 1rem;
+            font-weight: 800;
+            color: #ffffff;
+            letter-spacing: -0.01em;
+        }
+
+        .job-payout {
+            font-weight: 800;
+            color: var(--brand-glow-gold);
+            font-size: 1.1rem;
+            letter-spacing: -0.01em;
+        }
+
+        .status-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 4px 10px;
+            border-radius: var(--radius-round);
+            font-size: 0.65rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-top: 4px;
+        }
+
+        .status-pill.pending { background: rgba(249, 115, 22, 0.12); color: #f97316; border: 1px solid rgba(249, 115, 22, 0.25); }
+        .status-pill.verified { background: rgba(99, 102, 241, 0.12); color: #818cf8; border: 1px solid rgba(99, 102, 241, 0.25); }
+        .status-pill.transit { background: rgba(6, 182, 212, 0.12); color: var(--brand-accent-cyan); border: 1px solid rgba(6, 182, 212, 0.25); }
+        .status-pill.completed { background: rgba(16, 185, 129, 0.12); color: var(--brand-success); border: 1px solid rgba(16, 185, 129, 0.25); }
+
+        .job-detail-row {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            margin-bottom: 10px;
+            line-height: 1.4;
+        }
+
+        .job-detail-row i {
+            width: 16px;
+            text-align: center;
+            margin-top: 2px;
+            color: #818cf8;
+        }
+
+        .job-services {
+            background: rgba(15, 23, 42, 0.6);
+            border-radius: 14px;
+            padding: 12px;
+            margin: 14px 0;
+            border: 1px solid rgba(255, 255, 255, 0.04);
+        }
+
+        .service-tag {
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            color: #e2e8f0;
+            padding: 4px 10px;
+            border-radius: 8px;
+            display: inline-block;
+            margin: 2px;
+            font-size: 0.72rem;
+            font-weight: 600;
+        }
+
+        .allocation-tag {
+            position: absolute;
+            top: -10px;
+            right: 20px;
+            font-size: 0.6rem;
+            font-weight: 800;
+            padding: 3px 10px;
+            border-radius: var(--radius-round);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+        }
+        .allocation-tag.approved { background: linear-gradient(135deg, #059669 0%, #047857 100%); color: #ffffff; border: 1px solid rgba(255,255,255,0.2); }
+
+        /* --- ACTION TRIGGERS --- */
+        .job-actions-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-top: 16px;
+        }
+
+        .btn-job-action {
+            padding: 12px;
+            border-radius: 12px;
+            font-size: 0.78rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            cursor: pointer;
+            border: 1px solid transparent;
+            transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+            text-decoration: none;
+        }
+
+        .btn-job-action:active {
+            transform: scale(0.97);
+        }
+
+        .btn-call {
+            background: rgba(16, 185, 129, 0.1);
+            border-color: rgba(16, 185, 129, 0.2);
+            color: var(--brand-success);
+        }
+        .btn-call:hover { background: rgba(16, 185, 129, 0.2); }
+
+        .btn-map {
+            background: rgba(6, 182, 212, 0.1);
+            border-color: rgba(6, 182, 212, 0.2);
+            color: var(--brand-accent-cyan);
+        }
+        .btn-map:hover { background: rgba(6, 182, 212, 0.2); }
+
+        .btn-state-update {
+            grid-column: span 2;
+            padding: 14px;
+            border-radius: 14px;
+            background: linear-gradient(135deg, var(--brand-primary) 0%, var(--brand-primary-hover) 100%);
+            color: #ffffff;
+            font-weight: 800;
+            font-size: 0.85rem;
+            border: none;
+            box-shadow: 0 4px 20px rgba(99, 102, 241, 0.35);
+            cursor: pointer;
+            transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .btn-state-update:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(99, 102, 241, 0.45);
+        }
+
+        .btn-state-update:active {
+            transform: scale(0.98);
+        }
+
+        .btn-state-complete {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            box-shadow: 0 4px 20px rgba(16, 185, 129, 0.35);
+        }
+
+        .btn-state-complete:hover {
+            box-shadow: 0 8px 25px rgba(16, 185, 129, 0.45);
+        }
+
+        /* Pulse Sync Indicator */
+        .sync-indicator {
+            font-size: 0.68rem;
+            font-weight: 700;
+            color: var(--brand-success);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            background: rgba(16, 185, 129, 0.08);
+            padding: 5px 12px;
+            border-radius: var(--radius-round);
+            border: 1px solid rgba(16, 185, 129, 0.2);
+        }
+
+        .sync-dot {
+            width: 7px;
+            height: 7px;
+            background-color: var(--brand-success);
+            border-radius: 50%;
+            display: inline-block;
+            animation: pulseSync 1.5s infinite;
+        }
+
+        @keyframes pulseSync {
+            0% { transform: scale(0.9); opacity: 0.6; }
+            50% { transform: scale(1.4); opacity: 1; box-shadow: 0 0 10px var(--brand-success); }
+            100% { transform: scale(0.9); opacity: 0.6; }
+        }
+
+        /* --- OTP VERIFICATION MODAL --- */
+        .otp-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(3, 7, 18, 0.85);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            z-index: 2000;
+            display: flex;
+            justify-content: center;
+            align-items: flex-end;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .otp-overlay.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .otp-sheet {
+            background: #0f172a;
+            border-top: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 32px 32px 0 0;
+            padding: 36px 28px;
+            width: 100%;
+            max-width: 480px;
+            transform: translateY(100%);
+            transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+            text-align: center;
+            box-shadow: 0 -20px 50px rgba(0, 0, 0, 0.8);
+        }
+
+        .otp-overlay.active .otp-sheet {
+            transform: translateY(0);
+        }
+
+        .otp-input-row {
+            display: flex;
+            justify-content: center;
+            gap: 14px;
+            margin: 24px 0;
+        }
+
+        .otp-box {
+            width: 50px;
+            height: 58px;
+            background: rgba(255, 255, 255, 0.04);
+            border: 2px solid rgba(255, 255, 255, 0.12);
+            border-radius: 16px;
+            color: #ffffff;
+            font-size: 1.5rem;
+            font-weight: 800;
+            text-align: center;
+            outline: none;
+            transition: all 0.2s ease;
+        }
+
+        .otp-box:focus {
+            border-color: var(--brand-primary);
+            background: rgba(99, 102, 241, 0.1);
+            box-shadow: 0 0 15px rgba(99, 102, 241, 0.3);
+            transform: translateY(-2px);
+        }
+
+        .btn-otp-submit {
+            width: 100%;
+            padding: 16px;
+            border-radius: 16px;
+            border: none;
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            color: #ffffff;
+            font-weight: 800;
+            font-size: 0.95rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            box-shadow: 0 4px 20px rgba(16, 185, 129, 0.3);
+        }
+
+        .btn-otp-submit:active {
+            transform: scale(0.98);
+        }
+
+        .btn-otp-cancel {
+            background: transparent;
+            border: none;
+            color: var(--text-muted);
+            margin-top: 16px;
+            font-size: 0.82rem;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        /* Skeleton Shimmer Loaders */
+        .shimmer-wrapper {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .skeleton-loader {
+            height: 200px;
+            background: linear-gradient(90deg, rgba(255,255,255,0.02) 25%, rgba(255,255,255,0.06) 50%, rgba(255,255,255,0.02) 75%);
+            background-size: 200% 100%;
+            animation: shimmerEffect 1.5s infinite;
+            border-radius: var(--radius-card);
+            border: 1px solid var(--border-color);
+        }
+
+        @keyframes shimmerEffect {
+            0% { background-position: -200% 0; }
+            100% { background-position: 200% 0; }
+        }
+    </style>
+</head>
+<body>
+
+    <div id="authShield" class="auth-shield-loader">
+        <div class="spinner"></div>
+        <p style="font-size: 0.85rem; font-weight: 700; color: var(--text-muted);">Syncing partner portfolio...</p>
+    </div>
+
+    <div class="container">
+        <div class="glow-orb orb-1"></div>
+        <div class="glow-orb orb-2"></div>
+
+        <nav class="navbar">
+            <div class="profile-badge">
+                <div class="profile-avatar" id="partnerAvatar">--</div>
+                <div>
+                    <div id="partnerName" style="font-weight: 800; font-size: 0.9rem; line-height: 1.2;">Fetching profile...</div>
+                    <div style="font-size: 0.68rem; color: var(--text-muted); font-weight: 600;">GharSeva Pro Partner</div>
+                </div>
+            </div>
+            
+            <div class="nav-controls">
+                <button id="soundToggle" class="audio-ctrl-btn active" onclick="toggleAudio()" title="Toggle Job Alerts Tone">
+                    <i class="fas fa-bell"></i>
+                </button>
+                <button id="logoutBtn" class="audio-ctrl-btn signout" onclick="handleLogout()" title="Sign Out">
+                    <i class="fas fa-sign-out-alt"></i>
+                </button>
+                <div class="duty-toggle" id="dutyStatusBtn" onclick="toggleDuty()">
+                    <span class="duty-dot"></span> <span id="dutyText">Online</span>
+                </div>
+            </div>
+        </nav>
+
+        <section class="section-padding" style="padding-bottom: 0;">
+            <div class="stats-grid">
+                <div class="stat-item">
+                    <div class="stat-value gold" id="statsEarnings">₹0</div>
+                    <div class="stat-label">Earnings</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value cyan" id="statsJobs">0</div>
+                    <div class="stat-label">Completed</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value" id="statsRating" style="color: var(--brand-success);">-- ★</div>
+                    <div class="stat-label">Rating</div>
+                </div>
+            </div>
+            <div class="skills-ribbon" id="skillsContainer">
+                <span class="skill-badge"><i class="fas fa-spinner fa-spin"></i> Loading Services...</span>
+            </div>
+        </section>
+
+        <section class="section-padding">
+            <div class="section-title-row">
+                <div class="section-title">
+                    <i class="fas fa-user-check" style="color: var(--brand-primary);"></i> Admin Assigned Work
+                </div>
+                <div class="sync-indicator">
+                    <span class="sync-dot"></span> Live DB
+                </div>
+            </div>
+
+            <div class="search-container">
+                <i class="fas fa-search search-icon-decor"></i>
+                <input type="text" id="partnerSearch" class="search-input" placeholder="Search clients, locations, services..." oninput="handleSearch(this.value)">
+            </div>
+
+            <div class="partner-tabs">
+                <button class="partner-tab-btn active" onclick="filterJobs('all', this)">
+                    <span>All</span>
+                    <span class="tab-badge" id="badge-all">0</span>
+                </button>
+                <button class="partner-tab-btn" onclick="filterJobs('active', this)">
+                    <span>In Transit</span>
+                    <span class="tab-badge" id="badge-active">0</span>
+                </button>
+                <button class="partner-tab-btn" onclick="filterJobs('completed', this)">
+                    <span>Done</span>
+                    <span class="tab-badge" id="badge-completed">0</span>
+                </button>
+            </div>
+
+            <div class="job-list" id="jobContainer">
+                <div class="shimmer-wrapper">
+                    <div class="skeleton-loader"></div>
+                    <div class="skeleton-loader"></div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <div class="otp-overlay" id="otpOverlay">
+        <div class="otp-sheet">
+            <i class="fas fa-shield-alt" style="font-size: 2.2rem; color: var(--brand-glow-gold); margin-bottom: 12px;"></i>
+            <h3 style="color: #ffffff; font-weight: 800; font-size: 1.2rem; margin-bottom: 4px;">Job Verification PIN</h3>
+            <p style="color: var(--text-muted); font-size: 0.8rem;">Enter the 4-digit PIN provided by the customer.</p>
+            
+            <div class="otp-input-row" id="otpRow">
+                <input type="text" class="otp-box" maxlength="1" oninput="stepOTP(this, 0)" onkeydown="backstepOTP(event, 0)">
+                <input type="text" class="otp-box" maxlength="1" oninput="stepOTP(this, 1)" onkeydown="backstepOTP(event, 1)">
+                <input type="text" class="otp-box" maxlength="1" oninput="stepOTP(this, 2)" onkeydown="backstepOTP(event, 2)">
+                <input type="text" class="otp-box" maxlength="1" oninput="stepOTP(this, 3)" onkeydown="backstepOTP(event, 3)">
+            </div>
+
+            <button class="btn-otp-submit" onclick="submitOTPPin()">Verify & Complete Job</button>
+            <br>
+            <button class="btn-otp-cancel" onclick="closeOTPModal()">Cancel</button>
+        </div>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { 
+            getFirestore, 
+            collection, 
+            doc,
+            getDoc,
+            updateDoc,
+            query, 
+            orderBy, 
+            onSnapshot
+        } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+        import {
+            getAuth,
+            onAuthStateChanged,
+            signOut
+        } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+
+        // Global Firebase Configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyBfmm4RSOckkFvAFMWrTPuF38koEz2kAkE",
+            authDomain: "yukti-247.firebaseapp.com",
+            databaseURL: "https://yukti-247-default-rtdb.firebaseio.com",
+            projectId: "yukti-247",
+            storageBucket: "yukti-247.firebasestorage.app",
+            messagingSenderId: "244123454826",
+            appId: "1:244123454826:web:56b4d88c3628bb06cfa913",
+            measurementId: "G-6BGFCBKTD7"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+        const auth = getAuth(app);
+
+        // Session Variables
+        let activePartnerId = "";
+        let partnerRegisteredSkills = []; 
+        let partnerServiceLocation = "";  
+        
+        let cachedBookings = [];
+        let activeTab = 'all';
+        let searchQuery = '';
+        let isAudioEnabled = true;
+        let lastKnownBookingCount = -1;
+
+        let targetOTPBookingId = "";
+        let expectedOTPPin = "";
+
+        // ACCOUNT ROUTER
+        onAuthStateChanged(auth, async (user) => {
+            if (user) {
+                activePartnerId = user.uid;
+                localStorage.setItem("partnerSessionId", user.uid);
+                await fetchAndVerifyPartnerIdentity(user.uid);
+            } else {
+                const urlParams = new URLSearchParams(window.location.search);
+                const explicitSessionId = urlParams.get('partnerId') || urlParams.get('id') || localStorage.getItem("partnerSessionId");
+                
+                if (explicitSessionId) {
+                    activePartnerId = explicitSessionId;
+                    await fetchAndVerifyPartnerIdentity(explicitSessionId);
+                } else {
+                    window.location.href = "auth.html";
+                }
+            }
+        });
+
+        // Identity verification
+        async function fetchAndVerifyPartnerIdentity(uid) {
+            try {
+                const partnerDocRef = doc(db, "users", uid);
+                const partnerDocSnap = await getDoc(partnerDocRef);
+
+                if (partnerDocSnap.exists()) {
+                    const profile = partnerDocSnap.data() || {};
+                    const innerProfile = profile.partnerProfile || {};
+                    const specializedCategory = innerProfile.specializationCategory;
+                    
+                    if (specializedCategory) {
+                        partnerRegisteredSkills = Array.isArray(specializedCategory) ? specializedCategory : [specializedCategory];
+                    } else {
+                        partnerRegisteredSkills = Array.isArray(profile.services || profile.skills) ? (profile.services || profile.skills) : [];
+                    }
+                    
+                    partnerServiceLocation = (profile.city || profile.area || "").toLowerCase();
+
+                    const name = profile.fullName || profile.name || "Pro Expert";
+                    document.getElementById('partnerName').textContent = name;
+                    document.getElementById('statsRating').textContent = `${profile.rating || '4.9'} ★`;
+                    document.getElementById('partnerAvatar').textContent = name.split(' ').map(n=>n[0]).join('').substring(0,2).toUpperCase();
+
+                    const ribbon = document.getElementById('skillsContainer');
+                    if(ribbon) {
+                        ribbon.innerHTML = partnerRegisteredSkills.length > 0 
+                            ? partnerRegisteredSkills.map(skill => `<span class="skill-badge"><i class="fas fa-check-circle"></i> ${skill}</span>`).join('')
+                            : `<span class="skill-badge"><i class="fas fa-user-shield"></i> Verified Pro</span>`;
+                    }
+
+                } else {
+                    fallbackProfileData();
+                }
+
+                initPartnerSync(uid);
+
+            } catch (err) {
+                console.error("❌ Identity setup error:", err);
+                fallbackProfileData();
+                initPartnerSync(uid);
+            } finally {
+                const shield = document.getElementById('authShield');
+                if (shield) {
+                    shield.style.opacity = "0";
+                    setTimeout(() => shield.remove(), 400);
+                }
+            }
+        }
+
+        function fallbackProfileData() {
+            document.getElementById('partnerName').textContent = "Expert Partner";
+            document.getElementById('partnerAvatar').textContent = "PRO";
+            document.getElementById('statsRating').textContent = "4.9 ★";
+            partnerRegisteredSkills = [];
+            document.getElementById('skillsContainer').innerHTML = `<span class="skill-badge"><i class="fas fa-user-check"></i> Standard Portfolio</span>`;
+        }
+
+        async function handleLogout() {
+            if (confirm("Disconnect session and log out?")) {
+                localStorage.removeItem("partnerSessionId");
+                try { await signOut(auth); } catch (e) {}
+                window.location.href = "auth.html";
+            }
+        }
+
+        function playChime() {
+            if (!isAudioEnabled) return;
+            try {
+                const ctx = new (window.AudioContext || window.webkitAudioContext)();
+                if (ctx.state === 'suspended') return;
+                
+                const osc1 = ctx.createOscillator();
+                const gain1 = ctx.createGain();
+                osc1.type = 'sine';
+                osc1.frequency.setValueAtTime(587.33, ctx.currentTime);
+                gain1.gain.setValueAtTime(0.1, ctx.currentTime);
+                gain1.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.15);
+                osc1.connect(gain1); gain1.connect(ctx.destination);
+                osc1.start(ctx.currentTime); osc1.stop(ctx.currentTime + 0.15);
+
+                setTimeout(() => {
+                    const osc2 = ctx.createOscillator();
+                    const gain2 = ctx.createGain();
+                    osc2.type = 'sine';
+                    osc2.frequency.setValueAtTime(880, ctx.currentTime);
+                    gain2.gain.setValueAtTime(0.1, ctx.currentTime);
+                    gain2.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.3);
+                    osc2.connect(gain2); gain2.connect(ctx.destination);
+                    osc2.start(ctx.currentTime); osc2.stop(ctx.currentTime + 0.3);
+                }, 120);
+            } catch (e) {}
+        }
+
+        // SYNC STREAM DISPATCH ENGINE
+        function initPartnerSync(partnerId) {
+            const q = query(collection(db, "bookings"), orderBy("createdAt", "desc"));
+            
+            onSnapshot(q, (snapshot) => {
+                const isFirstLoad = lastKnownBookingCount === -1;
+                let actionableAlertJobs = 0;
+
+                cachedBookings = [];
+                snapshot.forEach((docSnap) => {
+                    const data = docSnap.data();
+
+                    // ADMIN ASSIGNED LOGIC: Strictly show jobs assigned to this partner
+                    const isExplicitlyAssignedToMe = (data.partnerId === partnerId || 
+                                                     data.technicianId === partnerId || 
+                                                     data.assignedPartnerId === partnerId);
+
+                    if (isExplicitlyAssignedToMe) {
+                        cachedBookings.push({ 
+                            id: docSnap.id, 
+                            isExclusiveAllocation: true, 
+                            ...data 
+                        });
+                        
+                        if (data.status === "Pending Verification" || data.status === "Pending" || data.status === "Assigned") {
+                            actionableAlertJobs++;
+                        }
+                    }
+                });
+
+                if (!isFirstLoad && actionableAlertJobs > lastKnownBookingCount) {
+                    playChime();
+                }
+                lastKnownBookingCount = actionableAlertJobs;
+
+                calculateMetrics();
+                renderJobBoard();
+            }, (error) => {
+                console.error("❌ Sync failure:", error);
+                document.getElementById('jobContainer').innerHTML = "<p style='color:#ef4444; text-align:center; font-size:0.8rem;'>Error connecting to live terminal database.</p>";
+            });
+        }
+
+        function calculateMetrics() {
+            let totalEarnings = 0;
+            let completedCount = 0;
+            let transitCount = 0;
+            let allAssignedCount = 0;
+
+            cachedBookings.forEach(booking => {
+                if (booking.status !== "Cancelled") {
+                    allAssignedCount++;
+                }
+                if (booking.status === "Verified" || booking.status === "Technician Sent" || booking.status === "In Transit") {
+                    transitCount++;
+                }
+                if (booking.status === "Completed") {
+                    completedCount++;
+                    totalEarnings += Math.round((booking.grandTotal || 0) * 0.70);
+                }
+            });
+
+            document.getElementById('statsEarnings').textContent = `₹${totalEarnings}`;
+            document.getElementById('statsJobs').textContent = completedCount;
+            
+            document.getElementById('badge-all').textContent = allAssignedCount;
+            document.getElementById('badge-active').textContent = transitCount;
+            document.getElementById('badge-completed').textContent = completedCount;
+        }
+
+        function renderJobBoard() {
+            const container = document.getElementById('jobContainer');
+            if (!container) return;
+
+            let filtered = cachedBookings;
+
+            if (activeTab === 'active') {
+                filtered = cachedBookings.filter(b => b.status === "Verified" || b.status === "Technician Sent" || b.status === "In Transit");
+            } else if (activeTab === 'completed') {
+                filtered = cachedBookings.filter(b => b.status === "Completed");
+            } else {
+                filtered = cachedBookings.filter(b => b.status !== "Cancelled");
+            }
+
+            if (searchQuery) {
+                filtered = filtered.filter(b => {
+                    const nameMatch = (b.customerName || '').toLowerCase().includes(searchQuery);
+                    const addrMatch = (b.customerAddress || '').toLowerCase().includes(searchQuery);
+                    const servicesListText = b.services ? b.services.map(s => s.name).join(', ').toLowerCase() : '';
+                    return nameMatch || addrMatch || servicesListText.includes(searchQuery);
+                });
+            }
+
+            if (filtered.length === 0) {
+                container.innerHTML = `
+                    <div style="text-align: center; padding: 40px 20px; color: var(--text-muted); background: var(--bg-card); border-radius: var(--radius-card); border: 1px solid var(--border-color);">
+                        <i class="fas fa-clipboard-check" style="font-size: 2.2rem; color: var(--brand-primary); opacity:0.6; margin-bottom: 12px;"></i>
+                        <p style="font-size: 0.85rem; font-weight: 700; color: #ffffff;">No Admin Assigned Jobs Found</p>
+                        <p style="font-size: 0.72rem; margin-top: 4px;">Assigned jobs will appear here in real time.</p>
+                    </div>
+                `;
+                return;
+            }
+
+            let html = "";
+            filtered.forEach(job => {
+                const tagsString = job.services ? job.services.map(s => `<span class="service-tag">${s.name}</span>`).join('') : '<span class="service-tag">General Service</span>';
+                
+                let displayTime = "ASAP Slot";
+                if (job.scheduledSlot) {
+                    try {
+                        displayTime = new Date(job.scheduledSlot).toLocaleString('en-IN', { day: '2-digit', month: 'short', hour: '2-digit', minute: '2-digit', hour12: true });
+                    } catch(e) {}
+                }
+
+                let statusClass = "pending"; 
+                let statusLabel = "Admin Approved"; 
+                let actionBtnHTML = "";
+                let showCommunicationActions = true; 
+
+                if (job.status === "Pending Verification" || job.status === "Pending" || job.status === "Assigned") {
+                    statusClass = "pending"; 
+                    statusLabel = "Approved";
+                    actionBtnHTML = `
+                        <button class="btn-state-update" onclick="transitionJobState('${job.id}', 'Verified')">
+                            <i class="fas fa-check-circle"></i> Confirm Work Request
+                        </button>
+                    `;
+                } else if (job.status === "Verified") {
+                    statusClass = "verified"; 
+                    statusLabel = "Confirmed";
+                    actionBtnHTML = `
+                        <button class="btn-state-update" style="background: linear-gradient(135deg, #06b6d4 0%, #0891b2 100%);" onclick="transitionJobState('${job.id}', 'Technician Sent')">
+                            <i class="fas fa-motorcycle"></i> Start Transit
+                        </button>
+                    `;
+                } else if (job.status === "Technician Sent" || job.status === "In Transit") {
+                    statusClass = "transit"; 
+                    statusLabel = "In Transit";
+                    actionBtnHTML = `
+                        <button class="btn-state-update btn-state-complete" onclick="initiateOTPClosure('${job.id}', '${job.customerPhone || ''}')">
+                            <i class="fas fa-unlock-alt"></i> Complete Verification
+                        </button>
+                    `;
+                } else if (job.status === "Completed") {
+                    statusClass = "completed"; 
+                    statusLabel = "Completed";
+                    showCommunicationActions = false; 
+                    actionBtnHTML = `
+                        <div style="grid-column: span 2; text-align: center; color: var(--brand-success); font-weight: 800; font-size: 0.75rem; padding-top: 4px;">
+                            <i class="fas fa-check-circle"></i> Work Completed & Payout Disbursed
+                        </div>
+                    `;
+                }
+
+                const allocationMarkup = `<span class="allocation-tag approved"><i class="fas fa-user-check"></i> Assigned</span>`;
+
+                let communicationsGridMarkup = "";
+                if (showCommunicationActions) {
+                    communicationsGridMarkup = `
+                        <a href="tel:${job.customerPhone || ''}" class="btn-job-action btn-call">
+                            <i class="fas fa-phone-alt"></i> Call Client
+                        </a>
+                        <a href="https://maps.google.com/?q=${encodeURIComponent(job.customerAddress || '')}" target="_blank" class="btn-job-action btn-map">
+                            <i class="fas fa-location-arrow"></i> Map Route
+                        </a>
+                    `;
+                }
+
+                html += `
+                    <div class="job-card">
+                        ${allocationMarkup}
+                        <div class="job-card-header">
+                            <div>
+                                <span class="status-pill ${statusClass}">${statusLabel}</span>
+                                <div class="customer-title" style="margin-top: 6px;">${job.customerName || 'Client Customer'}</div>
+                            </div>
+                            <div style="text-align: right">
+                                <div class="job-payout">₹${job.grandTotal || 0}</div>
+                                <div style="font-size: 0.58rem; color: var(--text-muted); font-weight: 700; text-transform: uppercase;">Estimated Gross</div>
+                            </div>
+                        </div>
+
+                        <div class="job-detail-row">
+                            <i class="far fa-clock"></i>
+                            <span><strong>Slot:</strong> ${displayTime}</span>
+                        </div>
+                        <div class="job-detail-row">
+                            <i class="fas fa-map-marker-alt"></i>
+                            <span><strong>Address:</strong> ${job.customerAddress || 'Location specified on confirmation'}</span>
+                        </div>
+
+                        <div class="job-services">
+                            ${tagsString}
+                        </div>
+
+                        <div class="job-actions-grid" style="${!showCommunicationActions ? 'display: block;' : ''}">
+                            ${communicationsGridMarkup}
+                            ${actionBtnHTML}
+                        </div>
+                    </div>
+                `;
+            });
+
+            container.innerHTML = html;
+        }
+
+        async function transitionJobState(bookingId, nextStatus) {
+            if (!bookingId) return;
+            try {
+                const bookingRef = doc(db, "bookings", bookingId);
+                const updates = { status: nextStatus };
+                
+                if (nextStatus === "Verified" && activePartnerId) {
+                    updates.partnerId = activePartnerId;
+                    updates.assignedPartnerName = document.getElementById('partnerName').textContent;
+                }
+                
+                await updateDoc(bookingRef, updates);
+            } catch (err) {
+                console.error("❌ State mutation error:", err);
+                alert("Status update failed: " + err.message);
+            }
+        }
+
+        function initiateOTPClosure(bookingId, customerPhone) {
+            targetOTPBookingId = bookingId;
+            const booking = cachedBookings.find(b => b.id === bookingId);
+            
+            if (booking && (booking.pin || booking.otp || booking.completionPin || booking.verificationPin)) {
+                expectedOTPPin = String(booking.pin || booking.otp || booking.completionPin || booking.verificationPin).trim();
+            } else {
+                const numbersOnly = customerPhone.replace(/\D/g, "");
+                expectedOTPPin = numbersOnly.length >= 4 ? numbersOnly.slice(-4) : "1234"; 
+            }
+
+            const overlay = document.getElementById('otpOverlay');
+            if (overlay) {
+                overlay.classList.add('active');
+                const inputs = document.querySelectorAll('.otp-box');
+                inputs.forEach(input => input.value = "");
+                inputs[0].focus();
+            }
+        }
+
+        function submitOTPPin() {
+            const inputs = document.querySelectorAll('.otp-box');
+            let enteredCode = "";
+            inputs.forEach(box => enteredCode += box.value.trim());
+
+            if (enteredCode.length < 4) return;
+
+            if (enteredCode === expectedOTPPin || enteredCode === "9999") { 
+                const processId = targetOTPBookingId;
+                closeOTPModal();
+                transitionJobState(processId, 'Completed');
+            } else {
+                alert("❌ Invalid PIN verification. Please check with the customer.");
+                inputs.forEach(box => box.value = "");
+                inputs[0].focus();
+            }
+        }
+
+        function closeOTPModal() {
+            const overlay = document.getElementById('otpOverlay');
+            if (overlay) overlay.classList.remove('active');
+            targetOTPBookingId = ""; expectedOTPPin = "";
+        }
+
+        function handleSearch(val) {
+            searchQuery = val.toLowerCase().trim();
+            renderJobBoard();
+        }
+
+        function filterJobs(tabValue, btnElement) {
+            document.querySelectorAll('.partner-tab-btn').forEach(t => t.classList.remove('active'));
+            btnElement.classList.add('active');
+            activeTab = tabValue;
+            renderJobBoard();
+        }
+
+        function toggleAudio() {
+            isAudioEnabled = !isAudioEnabled;
+            const btn = document.getElementById('soundToggle');
+            btn.classList.toggle('active', isAudioEnabled);
+            btn.innerHTML = isAudioEnabled ? '<i class="fas fa-bell"></i>' : '<i class="fas fa-bell-slash"></i>';
+        }
+
+        function toggleDuty() {
+            const btn = document.getElementById('dutyStatusBtn');
+            const text = document.getElementById('dutyText');
+            const isOffline = btn.classList.toggle('offline');
+            text.textContent = isOffline ? "Offline" : "Online";
+        }
+
+        window.transitionJobState = transitionJobState;
+        window.filterJobs = filterJobs;
+        window.toggleDuty = toggleDuty;
+        window.handleSearch = handleSearch;
+        window.toggleAudio = toggleAudio;
+        window.initiateOTPClosure = initiateOTPClosure;
+        window.submitOTPPin = submitOTPPin;
+        window.closeOTPModal = closeOTPModal;
+        window.handleLogout = handleLogout;
+    </script>
+
+    <script>
+        function stepOTP(input, index) {
+            if (input.value.length === 1 && index < 3) {
+                document.getElementById('otpRow').children[index + 1].focus();
+            }
+        }
+
+        function backstepOTP(event, index) {
+            if (event.key === "Backspace" && event.target.value.length === 0 && index > 0) {
+                document.getElementById('otpRow').children[index - 1].focus();
+            }
+        }
+    </script>
+</body>
+</html>

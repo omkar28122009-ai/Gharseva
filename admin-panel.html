@@ -133,6 +133,139 @@
         .form-control { background: rgba(0,0,0,0.3); border: 1px solid var(--border-color); border-radius: 8px; padding: 10px; color: #fff; font-size: 0.85rem; outline: none; }
         .form-control:focus { border-color: var(--brand-primary); }
         
+        .catalog-list { display: flex; flex-direction: column; gap: 12px; max-height: 550px; overflow-y: auto; }
+        .catalog-item { background: rgba(255,255,255,0.02); border: 1px solid var(--border-color); padding: 12px; border-radius: 10px; display: flex; flex-direction: column; gap: 8px; }
+        .catalog-thumb { width: 44px; height: 44px; border-radius: 6px; object-fit: cover; }
+
+        /* --- AUTH MODAL SYSTEM --- */
+        .auth-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(3, 7, 18, 0.95); backdrop-filter: blur(12px); z-index: 9999; display: flex; align-items: center; justify-content: center; }
+        .auth-card { width: 100%; max-width: 420px; background: #0f172a; border: 1px solid var(--border-color); border-radius: 20px; padding: 32px; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7); }
+        .auth-header { text-align: center; margin-bottom: 24px; }
+        .auth-header h2 { font-size: 1.5rem; font-weight: 800; margin-top: 10px; }
+        .auth-header p { font-size: 0.8rem; color: var(--text-muted); }
+
+        /* --- TOAST SYSTEM --- */
+        .toast-box { position: fixed; bottom: 24px; right: 24px; background: rgba(15, 23, 42, 0.95); border: 1px solid rgba(255, 255, 255, 0.15); padding: 14px 24px; border-radius: 12px; color: #ffffff; font-size: 0.82rem; font-weight: 600; z-index: 10000; display: flex; align-items: center; gap: 10px; transform: translateY(150%); transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1); }
+        .toast-box.visible { transform: translateY(0); }
+        .empty-narrative { text-align: center; padding: 50px; color: var(--text-muted); }
+    </style>
+</head>
+<body>
+
+    <div class="glow-orb orb-1"></div>
+    <div class="glow-orb orb-2"></div>
+
+    <!-- AUTHENTICATION OVERLAY MODAL -->
+    <div class="auth-overlay" id="authModal">
+        <div class="auth-card">
+            <div class="auth-header">
+                <i class="fas fa-shield-cat" style="font-size: 2.5rem; color: var(--brand-primary);"></i>
+                <h2>Operations Deck Login</h2>
+                <p>Provide verified admin credentials to gain access.</p>
+            </div>
+            <form id="authLoginForm" onsubmit="handleAdminAuthLogin(event)">
+                <div class="form-group">
+                    <label>Admin User Email</label>
+                    <input type="email" id="authEmail" class="form-control" placeholder="admin@gharseva.com" required>
+                </div>
+                <div class="form-group">
+                    <label>Password</label>
+                    <input type="password" id="authPassword" class="form-control" placeholder="••••••••" required>
+                </div>
+                <button type="submit" class="btn-override" id="btnLoginSubmit" style="width:100%; justify-content:center; padding:12px; margin-top:12px;">Authenticate Workspace</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- MAIN DASHBOARD SYSTEM WRAPPER -->
+    <div class="dashboard-wrapper" id="dashboardSystem">
+        <header class="console-header">
+            <div class="brand-zone">
+                <h1><i class="fas fa-shield-cat"></i> Enterprise Operations Console</h1>
+                <p>Advanced catalog, custom dynamic service notes, FAQ control matrix, and routing mechanics.</p>
+            </div>
+            <div class="header-actions">
+                <div class="search-filter-box">
+                    <i class="fas fa-magnifying-glass"></i>
+                    <input type="text" placeholder="Search order, customer..." id="searchBox" oninput="triggerSearchFilter(this.value)">
+                </div>
+                <button class="btn-view-toggle active" id="btn-mode-feed" onclick="switchMainDisplayMode('feed')"><i class="fas fa-table-cells-large"></i> Feed Mode</button>
+                <button class="btn-view-toggle" id="btn-mode-matrix" onclick="switchMainDisplayMode('matrix')"><i class="fas fa-table-list"></i> Advance Mode</button>
+                <button class="btn-view-toggle" id="btn-mode-ledger" onclick="switchMainDisplayMode('ledger')"><i class="fas fa-wallet"></i> Ledger</button>
+                <button class="btn-view-toggle" onclick="promptEditOpenPoolLabel()"><i class="fas fa-pen-to-square"></i> Pool Label</button>
+                <button class="btn-view-toggle btn-catalog-trigger" onclick="toggleCatalogModal(true)"><i class="fas fa-bars-progress"></i> Manage Catalog</button>
+                <button class="btn-view-toggle btn-logout" onclick="executeAdminSignOut()"><i class="fas fa-right-from-bracket"></i> Exit Console</button>
+            </div>
+        </header>
+
+        <div class="metrics-grid">
+            <div class="glass-card metric-card"><p>Total Bookings</p><h2 id="metric-total">0</h2></div>
+            <div class="glass-card metric-card" style="border-left: 2px solid var(--status-pending);"><p>Pending Pool</p><h2 id="metric-pending" style="color: var(--status-pending);">0</h2></div>
+            <div class="glass-card metric-card" style="border-left: 2px solid var(--status-intransit);"><p>Transit Nodes</p><h2 id="metric-transit" style="color: var(--status-intransit);">0</h2></div>
+            <div class="glass-card metric-card" style="border-left: 2px solid var(--status-inprogress);"><p>In Execution</p><h2 id="metric-execution" style="color: var(--status-inprogress);">0</h2></div>
+            <div class="glass-card metric-card" style="border-left: 2px solid var(--status-completed);"><p>Settled Contracts</p><h2 id="metric-completed" style="color: var(--status-completed);">0</h2></div>
+        </div>
+
+        <div class="filter-bar" id="mainFilterContainer">
+            <button class="tab-btn active" id="subtab-all" onclick="updateFilterView('all')"><i class="fas fa-globe"></i> All <span class="count-badge" id="badge-all">0</span></button>
+            <button class="tab-btn" id="subtab-pending" onclick="updateFilterView('pending')"><i class="fas fa-hourglass-start"></i> Pending <span class="count-badge" id="badge-pending">0</span></button>
+            <button class="tab-btn" id="subtab-verified" onclick="updateFilterView('verified')"><i class="fas fa-check-double"></i> Verified <span class="count-badge" id="badge-verified">0</span></button>
+            <button class="tab-btn" id="subtab-intransit" onclick="updateFilterView('intransit')"><i class="fas fa-truck-fast"></i> In Transit <span class="count-badge" id="badge-intransit">0</span></button>
+            <button class="tab-btn" id="subtab-inprogress" onclick="updateFilterView('inprogress')"><i class="fas fa-spinner"></i> In Progress <span class="count-badge" id="badge-inprogress">0</span></button>
+            <button class="tab-btn" id="subtab-completed" onclick="updateFilterView('completed')"><i class="fas fa-circle-check"></i> Completed <span class="count-badge" id="badge-completed">0</span></button>
+            <button class="tab-btn" id="subtab-cancelled" onclick="updateFilterView('cancelled')"><i class="fas fa-ban"></i> Cancelled <span class="count-badge" id="badge-cancelled">0</span></button>
+        </div>
+
+        <main class="booking-feed" id="adminFeedAnchor">
+            <div class="glass-card empty-narrative"><i class="fas fa-circle-notch fa-spin"></i><p>Aligning data logs...</p></div>
+        </main>
+
+        <div class="glass-card matrix-table-card" id="adminMatrixAnchor">
+            <table class="matrix-table">
+                <thead><tr><th>Order Ref ID</th><th>Client Details</th><th>Scheduled Date</th><th>Status Block</th><th>Resource Allocation</th><th>Actions Hub</th></tr></thead>
+                <tbody id="matrixTableBodyAnchor"></tbody>
+            </table>
+        </div>
+
+        <div class="partner-ledger-grid" id="adminLedgerAnchor">
+            <div class="glass-card" style="padding: 16px;">
+                <div class="partner-list-box" id="ledgerPartnerContainer"></div>
+            </div>
+            <div class="glass-card" id="ledgerFinancialStatementAnchor"></div>
+        </div>
+    </div>
+
+    <!-- CATALOG MODAL CONTROL PANEL WITH CUSTOM NOTE & FAQ BUILDER -->
+    <div class="catalog-modal-overlay" id="catalogModal">
+        <div class="catalog-modal-window"        .matrix-table-card { overflow-x: auto; display: none; }
+        .matrix-table { width: 100%; border-collapse: collapse; font-size: 0.82rem; text-align: left; }
+        .matrix-table th { background: rgba(15, 23, 42, 0.8); padding: 14px 16px; color: var(--text-muted); font-weight: 700; text-transform: uppercase; font-size: 0.68rem; border-bottom: 2px solid var(--border-color); }
+        .matrix-table td { padding: 14px 16px; border-bottom: 1px solid rgba(255, 255, 255, 0.04); vertical-align: middle; }
+        .matrix-table tr:hover { background: rgba(255, 255, 255, 0.02); }
+
+        /* --- PARTNER GENERAL LEDGER --- */
+        .partner-ledger-grid { display: grid; grid-template-columns: 1fr 2.5fr; gap: 24px; display: none; }
+        @media (max-width: 992px) { .partner-ledger-grid { grid-template-columns: 1fr; } }
+        .partner-list-box { max-height: 600px; overflow-y: auto; display: flex; flex-direction: column; gap: 8px; }
+        .partner-row-item { background: rgba(255, 255, 255, 0.02); border: 1px solid rgba(255, 255, 255, 0.05); border-radius: 10px; padding: 12px 16px; cursor: pointer; display: flex; justify-content: space-between; align-items: center; transition: all 0.2s; }
+        .partner-row-item:hover { background: rgba(255, 255, 255, 0.05); }
+        .partner-row-item.active { background: rgba(99, 102, 241, 0.12); border-color: var(--brand-primary); }
+
+        .ledger-breakdown-table { width: 100%; border-collapse: collapse; font-size: 0.8rem; margin-top: 16px; }
+        .ledger-breakdown-table th { text-align: left; padding: 10px; color: var(--text-muted); border-bottom: 1px solid var(--border-color); font-size: 0.7rem; text-transform: uppercase; }
+        .ledger-breakdown-table td { padding: 10px; border-bottom: 1px solid rgba(255, 255, 255, 0.03); }
+
+        /* --- SERVICE CATALOG MANAGER MODAL HUB --- */
+        .catalog-modal-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(3, 7, 18, 0.9); backdrop-filter: blur(8px); z-index: 5000; display: flex; align-items: center; justify-content: center; opacity: 0; pointer-events: none; transition: opacity 0.3s; }
+        .catalog-modal-overlay.active { opacity: 1; pointer-events: auto; }
+        .catalog-modal-window { width: 95%; max-width: 1100px; background: #0f172a; border: 1px solid var(--border-color); border-radius: 20px; padding: 24px; max-height: 90vh; overflow-y: auto; display: grid; grid-template-columns: 1.2fr 1fr; gap: 24px; }
+        @media(max-width: 850px) { .catalog-modal-window { grid-template-columns: 1fr; } }
+        
+        .form-group { display: flex; flex-direction: column; gap: 6px; margin-bottom: 14px; }
+        .form-group label { font-size: 0.72rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase; }
+        .form-control { background: rgba(0,0,0,0.3); border: 1px solid var(--border-color); border-radius: 8px; padding: 10px; color: #fff; font-size: 0.85rem; outline: none; }
+        .form-control:focus { border-color: var(--brand-primary); }
+        
         .catalog-list { display: flex; flex-direction: column; gap: 10px; max-height: 500px; overflow-y: auto; }
         .catalog-item { background: rgba(255,255,255,0.02); border: 1px solid var(--border-color); padding: 10px; border-radius: 10px; display: flex; align-items: center; justify-content: space-between; }
         .catalog-thumb { width: 44px; height: 44px; border-radius: 6px; object-fit: cover; }

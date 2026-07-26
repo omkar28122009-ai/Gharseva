@@ -237,143 +237,10 @@
 
     <!-- CATALOG MODAL CONTROL PANEL WITH CUSTOM NOTE & FAQ BUILDER -->
     <div class="catalog-modal-overlay" id="catalogModal">
-        <div class="catalog-modal-window"        .matrix-table-card { overflow-x: auto; display: none; }
-        .matrix-table { width: 100%; border-collapse: collapse; font-size: 0.82rem; text-align: left; }
-        .matrix-table th { background: rgba(15, 23, 42, 0.8); padding: 14px 16px; color: var(--text-muted); font-weight: 700; text-transform: uppercase; font-size: 0.68rem; border-bottom: 2px solid var(--border-color); }
-        .matrix-table td { padding: 14px 16px; border-bottom: 1px solid rgba(255, 255, 255, 0.04); vertical-align: middle; }
-        .matrix-table tr:hover { background: rgba(255, 255, 255, 0.02); }
-
-        /* --- PARTNER GENERAL LEDGER --- */
-        .partner-ledger-grid { display: grid; grid-template-columns: 1fr 2.5fr; gap: 24px; display: none; }
-        @media (max-width: 992px) { .partner-ledger-grid { grid-template-columns: 1fr; } }
-        .partner-list-box { max-height: 600px; overflow-y: auto; display: flex; flex-direction: column; gap: 8px; }
-        .partner-row-item { background: rgba(255, 255, 255, 0.02); border: 1px solid rgba(255, 255, 255, 0.05); border-radius: 10px; padding: 12px 16px; cursor: pointer; display: flex; justify-content: space-between; align-items: center; transition: all 0.2s; }
-        .partner-row-item:hover { background: rgba(255, 255, 255, 0.05); }
-        .partner-row-item.active { background: rgba(99, 102, 241, 0.12); border-color: var(--brand-primary); }
-
-        .ledger-breakdown-table { width: 100%; border-collapse: collapse; font-size: 0.8rem; margin-top: 16px; }
-        .ledger-breakdown-table th { text-align: left; padding: 10px; color: var(--text-muted); border-bottom: 1px solid var(--border-color); font-size: 0.7rem; text-transform: uppercase; }
-        .ledger-breakdown-table td { padding: 10px; border-bottom: 1px solid rgba(255, 255, 255, 0.03); }
-
-        /* --- SERVICE CATALOG MANAGER MODAL HUB --- */
-        .catalog-modal-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(3, 7, 18, 0.9); backdrop-filter: blur(8px); z-index: 5000; display: flex; align-items: center; justify-content: center; opacity: 0; pointer-events: none; transition: opacity 0.3s; }
-        .catalog-modal-overlay.active { opacity: 1; pointer-events: auto; }
-        .catalog-modal-window { width: 95%; max-width: 1100px; background: #0f172a; border: 1px solid var(--border-color); border-radius: 20px; padding: 24px; max-height: 90vh; overflow-y: auto; display: grid; grid-template-columns: 1.2fr 1fr; gap: 24px; }
-        @media(max-width: 850px) { .catalog-modal-window { grid-template-columns: 1fr; } }
-        
-        .form-group { display: flex; flex-direction: column; gap: 6px; margin-bottom: 14px; }
-        .form-group label { font-size: 0.72rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase; }
-        .form-control { background: rgba(0,0,0,0.3); border: 1px solid var(--border-color); border-radius: 8px; padding: 10px; color: #fff; font-size: 0.85rem; outline: none; }
-        .form-control:focus { border-color: var(--brand-primary); }
-        
-        .catalog-list { display: flex; flex-direction: column; gap: 10px; max-height: 500px; overflow-y: auto; }
-        .catalog-item { background: rgba(255,255,255,0.02); border: 1px solid var(--border-color); padding: 10px; border-radius: 10px; display: flex; align-items: center; justify-content: space-between; }
-        .catalog-thumb { width: 44px; height: 44px; border-radius: 6px; object-fit: cover; }
-
-        /* --- AUTH MODAL SYSTEM --- */
-        .auth-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(3, 7, 18, 0.95); backdrop-filter: blur(12px); z-index: 9999; display: flex; align-items: center; justify-content: center; }
-        .auth-card { width: 100%; max-width: 420px; background: #0f172a; border: 1px solid var(--border-color); border-radius: 20px; padding: 32px; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7); }
-        .auth-header { text-align: center; margin-bottom: 24px; }
-        .auth-header h2 { font-size: 1.5rem; font-weight: 800; margin-top: 10px; }
-        .auth-header p { font-size: 0.8rem; color: var(--text-muted); }
-
-        /* --- TOAST SYSTEM --- */
-        .toast-box { position: fixed; bottom: 24px; right: 24px; background: rgba(15, 23, 42, 0.95); border: 1px solid rgba(255, 255, 255, 0.15); padding: 14px 24px; border-radius: 12px; color: #ffffff; font-size: 0.82rem; font-weight: 600; z-index: 10000; display: flex; align-items: center; gap: 10px; transform: translateY(150%); transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1); }
-        .toast-box.visible { transform: translateY(0); }
-        .empty-narrative { text-align: center; padding: 50px; color: var(--text-muted); }
-    </style>
-</head>
-<body>
-
-    <div class="glow-orb orb-1"></div>
-    <div class="glow-orb orb-2"></div>
-
-    <!-- AUTHENTICATION OVERLAY MODAL -->
-    <div class="auth-overlay" id="authModal">
-        <div class="auth-card">
-            <div class="auth-header">
-                <i class="fas fa-shield-cat" style="font-size: 2.5rem; color: var(--brand-primary);"></i>
-                <h2>Operations Deck Login</h2>
-                <p>Provide verified admin credentials to gain access.</p>
-            </div>
-            <form id="authLoginForm" onsubmit="handleAdminAuthLogin(event)">
-                <div class="form-group">
-                    <label>Admin User Email</label>
-                    <input type="email" id="authEmail" class="form-control" placeholder="admin@gharseva.com" required>
-                </div>
-                <div class="form-group">
-                    <label>Password</label>
-                    <input type="password" id="authPassword" class="form-control" placeholder="••••••••" required>
-                </div>
-                <button type="submit" class="btn-override" id="btnLoginSubmit" style="width:100%; justify-content:center; padding:12px; margin-top:12px;">Authenticate Workspace</button>
-            </form>
-        </div>
-    </div>
-
-    <!-- MAIN DASHBOARD SYSTEM WRAPPER -->
-    <div class="dashboard-wrapper" id="dashboardSystem">
-        <header class="console-header">
-            <div class="brand-zone">
-                <h1><i class="fas fa-shield-cat"></i> Enterprise Operations Console</h1>
-                <p>Advanced routing mechanics integrated with financial settlement audit logging.</p>
-            </div>
-            <div class="header-actions">
-                <div class="search-filter-box">
-                    <i class="fas fa-magnifying-glass"></i>
-                    <input type="text" placeholder="Search order, customer..." id="searchBox" oninput="triggerSearchFilter(this.value)">
-                </div>
-                <button class="btn-view-toggle active" id="btn-mode-feed" onclick="switchMainDisplayMode('feed')"><i class="fas fa-table-cells-large"></i> Feed Mode</button>
-                <button class="btn-view-toggle" id="btn-mode-matrix" onclick="switchMainDisplayMode('matrix')"><i class="fas fa-table-list"></i> Advance Mode</button>
-                <button class="btn-view-toggle" id="btn-mode-ledger" onclick="switchMainDisplayMode('ledger')"><i class="fas fa-wallet"></i> Ledger</button>
-                <button class="btn-view-toggle btn-catalog-trigger" onclick="toggleCatalogModal(true)"><i class="fas fa-bars-progress"></i> Manage Catalog</button>
-                <button class="btn-view-toggle btn-logout" onclick="executeAdminSignOut()"><i class="fas fa-right-from-bracket"></i> Exit Console</button>
-            </div>
-        </header>
-
-        <div class="metrics-grid">
-            <div class="glass-card metric-card"><p>Total Bookings</p><h2 id="metric-total">0</h2></div>
-            <div class="glass-card metric-card" style="border-left: 2px solid var(--status-pending);"><p>Pending Pool</p><h2 id="metric-pending" style="color: var(--status-pending);">0</h2></div>
-            <div class="glass-card metric-card" style="border-left: 2px solid var(--status-intransit);"><p>Transit Nodes</p><h2 id="metric-transit" style="color: var(--status-intransit);">0</h2></div>
-            <div class="glass-card metric-card" style="border-left: 2px solid var(--status-inprogress);"><p>In Execution</p><h2 id="metric-execution" style="color: var(--status-inprogress);">0</h2></div>
-            <div class="glass-card metric-card" style="border-left: 2px solid var(--status-completed);"><p>Settled Contracts</p><h2 id="metric-completed" style="color: var(--status-completed);">0</h2></div>
-        </div>
-
-        <div class="filter-bar" id="mainFilterContainer">
-            <button class="tab-btn active" id="subtab-all" onclick="updateFilterView('all')"><i class="fas fa-globe"></i> All <span class="count-badge" id="badge-all">0</span></button>
-            <button class="tab-btn" id="subtab-pending" onclick="updateFilterView('pending')"><i class="fas fa-hourglass-start"></i> Pending <span class="count-badge" id="badge-pending">0</span></button>
-            <button class="tab-btn" id="subtab-verified" onclick="updateFilterView('verified')"><i class="fas fa-check-double"></i> Verified <span class="count-badge" id="badge-verified">0</span></button>
-            <button class="tab-btn" id="subtab-intransit" onclick="updateFilterView('intransit')"><i class="fas fa-truck-fast"></i> In Transit <span class="count-badge" id="badge-intransit">0</span></button>
-            <button class="tab-btn" id="subtab-inprogress" onclick="updateFilterView('inprogress')"><i class="fas fa-spinner"></i> In Progress <span class="count-badge" id="badge-inprogress">0</span></button>
-            <button class="tab-btn" id="subtab-completed" onclick="updateFilterView('completed')"><i class="fas fa-circle-check"></i> Completed <span class="count-badge" id="badge-completed">0</span></button>
-            <button class="tab-btn" id="subtab-cancelled" onclick="updateFilterView('cancelled')"><i class="fas fa-ban"></i> Cancelled <span class="count-badge" id="badge-cancelled">0</span></button>
-        </div>
-
-        <main class="booking-feed" id="adminFeedAnchor">
-            <div class="glass-card empty-narrative"><i class="fas fa-circle-notch fa-spin"></i><p>Aligning data logs...</p></div>
-        </main>
-
-        <div class="glass-card matrix-table-card" id="adminMatrixAnchor">
-            <table class="matrix-table">
-                <thead><tr><th>Order Ref ID</th><th>Client Details</th><th>Scheduled Date</th><th>Status Block</th><th>Resource Allocation</th><th>Actions Hub</th></tr></thead>
-                <tbody id="matrixTableBodyAnchor"></tbody>
-            </table>
-        </div>
-
-        <div class="partner-ledger-grid" id="adminLedgerAnchor">
-            <div class="glass-card" style="padding: 16px;">
-                <h4 style="font-size:0.85rem; text-transform:uppercase; color:var(--text-muted); margin-bottom:12px;">Field Specialists</h4>
-                <div class="partner-list-box" id="ledgerPartnerContainer"></div>
-            </div>
-            <div class="glass-card" id="ledgerFinancialStatementAnchor"></div>
-        </div>
-    </div>
-
-    <!-- CATALOG MODAL CONTROL PANEL -->
-    <div class="catalog-modal-overlay" id="catalogModal">
         <div class="catalog-modal-window">
             <div>
                 <div style="display:flex; justify-content:space-between; margin-bottom:16px;">
-                    <h3 id="catalogFormTitle" style="font-weight:800;">Create Service Entry</h3>
+                    <h3 id="catalogFormTitle" style="font-weight:800;">Create / Edit Service Entry</h3>
                     <button class="btn-purge" style="margin:0; padding:4px 10px;" onclick="toggleCatalogModal(false)">Close Panel</button>
                 </div>
                 <form id="catalogConfigForm" onsubmit="handleCatalogCommit(event)">
@@ -385,6 +252,13 @@
                         </div>
                     </div>
                     <div class="form-group"><label>Description Details</label><textarea id="srvDesc" class="form-control" rows="2" required></textarea></div>
+                    
+                    <!-- CUSTOM SERVICE NOTE BUILDER -->
+                    <div class="form-group">
+                        <label>Custom Service Note (Optional Callout)</label>
+                        <textarea id="srvNote" class="form-control" rows="2" placeholder="e.g., Please ensure AC switchboard is accessible before technician arrival."></textarea>
+                    </div>
+
                     <div style="display:grid; grid-template-columns: 1fr 1fr 1fr; gap:12px;">
                         <div class="form-group"><label>Rate (₹)</label><input type="number" id="srvPrice" class="form-control" required></div>
                         <div class="form-group"><label>Original Strike (₹)</label><input type="number" id="srvStrike" class="form-control"></div>
@@ -396,6 +270,13 @@
                     </div>
                     <div class="form-group"><label>Inclusions (Separate with commas)</label><input type="text" id="srvInclusions" class="form-control" placeholder="Jet wash, Filter cleaning"></div>
                     <div class="form-group"><label>Exclusions (Separate with commas)</label><input type="text" id="srvExclusions" class="form-control" placeholder="Spare part replacement"></div>
+                    
+                    <!-- PER-SERVICE FAQ BUILDER -->
+                    <div class="form-group">
+                        <label>Custom FAQs (Format: Question | Answer on each line)</label>
+                        <textarea id="srvFaqs" class="form-control" rows="3" placeholder="Is outdoor unit cleaning included? | Yes, chemical wash for both indoor and outdoor units is included.&#10;Does it cover gas refilling? | Gas checking is included, refilling is charged separately."></textarea>
+                    </div>
+
                     <button type="submit" class="btn-override" id="srvSubmitBtn" style="width:100%; justify-content:center; padding:12px; margin-top:8px;">Commit Entry Live to Storefront</button>
                     <button type="button" class="btn-purge" id="srvCancelBtn" style="width:100%; display:none; background:rgba(255,255,255,0.05); color:#fff; padding:10px;" onclick="resetCatalogFormState()">Cancel Sub-Edit Module</button>
                 </form>
@@ -415,7 +296,7 @@
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
         import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
-        import { getFirestore, collection, onSnapshot, doc, getDoc, updateDoc, deleteDoc, setDoc, query, where } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+        import { getFirestore, collection, onSnapshot, doc, getDoc, updateDoc, deleteDoc, setDoc, addDoc, query, where } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
         // Global Configuration Array Parameters Map
         const firebaseConfig = {
@@ -449,6 +330,9 @@
         let currentDisplayMode = 'feed'; 
         let currentSelectedLedgerPartnerId = null;
         let unsubscribeBookings = null, unsubscribePartners = null, unsubscribeServices = null;
+
+        // Custom Admin Open Pool display label (configurable locally)
+        let adminOpenPoolLabel = localStorage.getItem('admin_open_pool_label') || "-- Drop to Open Pool --";
 
         const statusColorConfig = {
             'Pending': 'var(--status-pending)', 'Verified': 'var(--status-verified)',
@@ -511,6 +395,18 @@
             if(unsubscribePartners) unsubscribePartners();
             if(unsubscribeServices) unsubscribeServices();
         }
+
+        // --- ADMIN OPEN POOL LABEL EDIT FUNCTION ---
+        window.promptEditOpenPoolLabel = function() {
+            const current = adminOpenPoolLabel.replace(/^--\s*/, '').replace(/\s*--$/, '');
+            const input = prompt("Enter custom display name for Open Pool on Admin page:", current);
+            if (input !== null && input.trim() !== "") {
+                adminOpenPoolLabel = `-- ${input.trim()} --`;
+                localStorage.setItem('admin_open_pool_label', adminOpenPoolLabel);
+                showToast("Open Pool Admin display label updated!");
+                renderMasterConsole();
+            }
+        };
 
         // System Wide Architecture Boot Loader Event Loop Hook
         function startDataMatrixSynchronization() {
@@ -627,7 +523,7 @@
                             <div class="uid-container"><span class="uid-label">Resource Unit Allocation:</span><span class="uid-value">${isUnassigned ? 'UNASSIGNED OPEN POOL' : (booking.partnerName || booking.assignedPartnerName || 'Assigned Specialist')}</span></div>
                             <div class="uid-container"><span class="uid-label">Tracking Pipeline Status:</span><span style="color:${statusColorConfig[booking.status || 'Pending']}; font-weight:700;">${booking.status || 'Pending'}</span></div>
                             <div class="forced-control-row">
-                                <select class="select-override" id="override-select-${booking.id}"><option value="">-- Drop to Open Pool --</option>${partnerOptions}</select>
+                                <select class="select-override" id="override-select-${booking.id}"><option value="">${adminOpenPoolLabel}</option>${partnerOptions}</select>
                                 <button class="btn-override" onclick="commitPartnerScopingChange('${booking.id}')"><i class="fas fa-user-check"></i> Assign Unit</button>
                             </div>
                             <div class="forced-control-row" style="grid-template-columns: 1fr 1fr; gap:6px;">
@@ -673,7 +569,7 @@
                                 <option value="Cancelled" ${b.status==='Cancelled'?'selected':''}>Cancelled</option>
                             </select>
                         </td>
-                        <td><select class="select-override" id="table-partner-${b.id}"><option value="">-- Open Pool --</option>${partnerOptions}</select></td>
+                        <td><select class="select-override" id="table-partner-${b.id}"><option value="">${adminOpenPoolLabel}</option>${partnerOptions}</select></td>
                         <td>
                             <div style="display:flex; gap:6px;">
                                 <button class="btn-override" style="padding:4px 8px;" onclick="commitTableInlineMutations('${b.id}')">Save</button>
@@ -685,13 +581,55 @@
             }).join('');
         }
 
+        // --- PARTNER CRUD MANAGEMENT ---
+        window.addNewPartner = async function() {
+            const fullName = prompt("Enter Partner Full Name:");
+            if (!fullName || !fullName.trim()) return;
+            const phone = prompt("Enter Partner Phone Number:") || "N/A";
+
+            try {
+                await addDoc(collection(db, "users"), {
+                    fullName: fullName.trim(),
+                    phone: phone.trim(),
+                    role: "partner",
+                    rating: "5.0",
+                    createdAt: new Date()
+                });
+                showToast("New partner added successfully!");
+            } catch(err) {
+                showToast("Failed to add partner: " + err.message, false);
+            }
+        };
+
+        window.deletePartner = async function(id, name) {
+            if (!confirm(`Are you sure you want to delete partner "${name}"?`)) return;
+            try {
+                await deleteDoc(doc(db, "users", id));
+                if (currentSelectedLedgerPartnerId === id) {
+                    currentSelectedLedgerPartnerId = null;
+                }
+                showToast("Partner deleted successfully.");
+            } catch(err) {
+                showToast("Failed to delete partner: " + err.message, false);
+            }
+        };
+
         // --- FULLY SYNCHRONIZED PARTNER GENERAL LEDGER (70 / 30 SPLIT) ---
         function renderLedgerConsole() {
             const listContainer = document.getElementById('ledgerPartnerContainer');
             if(!listContainer) return;
 
+            let headerHtml = `
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+                    <h4 style="font-size:0.85rem; text-transform:uppercase; color:var(--text-muted); margin:0;">Field Specialists</h4>
+                    <button class="btn-override" style="padding:5px 10px; font-size:0.75rem;" onclick="addNewPartner()">
+                        <i class="fas fa-plus"></i> Add Partner
+                    </button>
+                </div>
+            `;
+
             if (partnersBuffer.length === 0) {
-                listContainer.innerHTML = `<p class="text-muted" style="font-size: 0.8rem;">No registered partners.</p>`;
+                listContainer.innerHTML = headerHtml + `<p class="text-muted" style="font-size: 0.8rem; text-align:center; padding:20px 0;">No registered partners found.</p>`;
                 renderActivePartnerFinancialStatement();
                 return;
             }
@@ -700,20 +638,26 @@
                 currentSelectedLedgerPartnerId = partnersBuffer[0].uid;
             }
 
-            listContainer.innerHTML = partnersBuffer.map(p => {
+            const partnerRowsHtml = partnersBuffer.map(p => {
                 const partnerBookings = bookingsBuffer.filter(b => (b.partnerId === p.uid || b.technicianId === p.uid || b.assignedPartnerId === p.uid));
                 const completedCount = partnerBookings.filter(b => b.status === 'Completed').length;
                 return `
-                    <div class="partner-row-item ${currentSelectedLedgerPartnerId === p.uid ? 'active' : ''}" onclick="selectLedgerPartnerTarget('${p.uid}')">
-                        <div>
+                    <div class="partner-row-item ${currentSelectedLedgerPartnerId === p.uid ? 'active' : ''}">
+                        <div style="flex-grow:1; cursor:pointer;" onclick="selectLedgerPartnerTarget('${p.uid}')">
                             <div style="font-weight:700; font-size:0.85rem; color:#fff;">${p.fullName}</div>
                             <div style="font-size:0.7rem; color:var(--text-muted);"><i class="fas fa-phone" style="font-size:0.6rem;"></i> ${p.phone}</div>
                         </div>
-                        <span class="count-badge" style="background: rgba(99,102,241,0.2);">${completedCount} Completed</span>
+                        <div style="display:flex; align-items:center; gap:8px;">
+                            <span class="count-badge" style="background: rgba(99,102,241,0.2);">${completedCount} Done</span>
+                            <button class="btn-purge" style="padding:4px 8px; margin:0; font-size:0.7rem;" title="Delete Partner" onclick="event.stopPropagation(); deletePartner('${p.uid}', '${p.fullName}')">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </div>
                     </div>
                 `;
             }).join('');
 
+            listContainer.innerHTML = headerHtml + partnerRowsHtml;
             renderActivePartnerFinancialStatement();
         }
 
@@ -811,18 +755,28 @@
             `;
         }
 
-        // --- CATALOG DATA MUTATIONS (BI-DIRECTIONAL SYNCHRONIZATION) ---
+        // --- CATALOG DATA MUTATIONS WITH CUSTOM NOTE & FAQ PARSING ---
         window.handleCatalogCommit = async function(e) {
             e.preventDefault();
             const docId = document.getElementById('editServiceId').value || "srv_" + Date.now();
             const incRaw = document.getElementById('srvInclusions').value;
             const excRaw = document.getElementById('srvExclusions').value;
+            const noteRaw = document.getElementById('srvNote').value.trim();
+            const faqsRaw = document.getElementById('srvFaqs').value.trim();
+
+            // Line-by-line parsing for Custom Questions and Answers (Format: Question | Answer)
+            const faqsArray = faqsRaw ? faqsRaw.split('\n').filter(line => line.includes('|')).map(line => {
+                const parts = line.split('|');
+                return { q: parts[0].trim(), a: parts.slice(1).join('|').trim() };
+            }) : [];
 
             const payload = {
                 id: docId,
                 title: document.getElementById('srvTitle').value.trim(),
                 category: document.getElementById('srvCategory').value,
                 desc: document.getElementById('srvDesc').value.trim(),
+                note: noteRaw,
+                faqs: faqsArray,
                 price: Number(document.getElementById('srvPrice').value) || 0,
                 strike: Number(document.getElementById('srvStrike').value) || (Number(document.getElementById('srvPrice').value) + 200),
                 duration: document.getElementById('srvDuration').value.trim() || "60-90 Min",
@@ -835,42 +789,84 @@
 
             try {
                 await setDoc(doc(db, "services", docId), payload, { merge: true });
-                showToast("Storefront service parameters matrix updated perfectly!", true);
+                showToast("Storefront service parameters & custom FAQs committed!", true);
                 resetCatalogFormState();
             } catch(err) { showToast("Catalog pipeline block error: " + err.message, false); }
         };
 
+        // --- RENDER CATALOG LIST (UPDATED TO DISPLAY NOTES & FAQS) ---
         function renderModalCatalogList() {
             const container = document.getElementById('modalCatalogListingBox');
             if(!container) return;
-            container.innerHTML = catalogBuffer.map(s => `
+
+            if (catalogBuffer.length === 0) {
+                container.innerHTML = `<div class="empty-narrative" style="padding:20px 0;"><p>No active services in catalog.</p></div>`;
+                return;
+            }
+
+            container.innerHTML = catalogBuffer.map(s => {
+                const hasNote = s.note && s.note.trim() !== "";
+                const hasFaqs = Array.isArray(s.faqs) && s.faqs.length > 0;
+
+                return `
                 <div class="catalog-item">
-                    <div style="display:flex; align-items:center; gap:10px;">
-                        <img src="${s.image}" class="catalog-thumb">
-                        <div><h5 style="font-weight:700;">${s.title}</h5><p style="font-size:0.7rem; color:var(--status-pending)">₹${s.price} | <span style="text-transform:uppercase;">${s.category}</span></p></div>
+                    <div style="display:flex; align-items:center; justify-content:space-between; width:100%;">
+                        <div style="display:flex; align-items:center; gap:10px;">
+                            <img src="${s.image || 'https://images.unsplash.com/photo-1621905251189-08b45d6a269e?auto=format&fit=crop&w=200&q=80'}" class="catalog-thumb">
+                            <div>
+                                <h5 style="font-weight:700;">${s.title}</h5>
+                                <p style="font-size:0.7rem; color:var(--status-pending)">₹${s.price} | <span style="text-transform:uppercase;">${s.category}</span></p>
+                            </div>
+                        </div>
+                        <div style="display:flex; gap:6px;">
+                            <button class="btn-override" style="padding:4px 8px;" onclick="initiateCatalogEdit('${s.id}')"><i class="fas fa-edit"></i> Edit</button>
+                            <button class="btn-purge" style="padding:4px 8px; margin:0;" onclick="executeCatalogPurge('${s.id}')"><i class="fas fa-trash"></i></button>
+                        </div>
                     </div>
-                    <div style="display:flex; gap:6px;">
-                        <button class="btn-override" style="padding:4px 8px;" onclick="initiateCatalogEdit('${s.id}')"><i class="fas fa-edit"></i></button>
-                        <button class="btn-purge" style="padding:4px 8px; margin:0;" onclick="executeCatalogPurge('${s.id}')"><i class="fas fa-trash"></i></button>
-                    </div>
+
+                    ${hasNote ? `
+                        <div style="font-size:0.75rem; background:rgba(99, 102, 241, 0.08); padding:8px 10px; border-radius:6px; border-left:3px solid var(--brand-primary); color:#e2e8f0; width:100%;">
+                            <i class="fas fa-sticky-note" style="color:var(--brand-primary); margin-right:6px;"></i><strong>Note:</strong> ${s.note}
+                        </div>
+                    ` : ''}
+
+                    ${hasFaqs ? `
+                        <details style="font-size:0.75rem; background:rgba(15, 23, 42, 0.6); border:1px solid rgba(255,255,255,0.06); padding:6px 10px; border-radius:6px; color:#e2e8f0; width:100%;">
+                            <summary style="cursor:pointer; color:var(--text-muted); font-weight:700; outline:none;">
+                                <i class="fas fa-circle-question" style="color:var(--status-inprogress); margin-right:6px;"></i><strong>FAQs (${s.faqs.length})</strong>
+                            </summary>
+                            <div style="margin-top:8px; display:flex; flex-direction:column; gap:6px; padding-left:4px;">
+                                ${s.faqs.map(f => `
+                                    <div style="border-bottom:1px solid rgba(255,255,255,0.04); padding-bottom:4px;">
+                                        <div style="font-weight:700; color:#a5b4fc;">Q: ${f.q}</div>
+                                        <div style="color:#94a3b8; font-size:0.72rem;">A: ${f.a}</div>
+                                    </div>
+                                `).join('')}
+                            </div>
+                        </details>
+                    ` : ''}
                 </div>
-            `).join('');
+            `}).join('');
         }
 
         window.initiateCatalogEdit = function(id) {
             const match = catalogBuffer.find(c => c.id === id);
             if(!match) return;
             document.getElementById('editServiceId').value = match.id;
-            document.getElementById('srvTitle').value = match.title;
-            document.getElementById('srvCategory').value = match.category;
+            document.getElementById('srvTitle').value = match.title || '';
+            document.getElementById('srvCategory').value = match.category || 'appliances';
             document.getElementById('srvDesc').value = match.desc || '';
-            document.getElementById('srvPrice').value = match.price;
+            document.getElementById('srvNote').value = match.note || '';
+            document.getElementById('srvPrice').value = match.price || '';
             document.getElementById('srvStrike').value = match.strike || '';
             document.getElementById('srvDuration').value = match.duration || '';
             document.getElementById('srvWarranty').value = match.warranty || '';
             document.getElementById('srvImageUrl').value = match.image || '';
             document.getElementById('srvInclusions').value = Array.isArray(match.inc) ? match.inc.join(', ') : '';
             document.getElementById('srvExclusions').value = Array.isArray(match.exc) ? match.exc.join(', ') : '';
+
+            // Reconstruct dynamic FAQ lines into Question | Answer text
+            document.getElementById('srvFaqs').value = Array.isArray(match.faqs) ? match.faqs.map(f => `${f.q} | ${f.a}`).join('\n') : '';
 
             document.getElementById('catalogFormTitle').textContent = "Modify Service Target Node";
             document.getElementById('srvSubmitBtn').textContent = "Save Storefront Changes";
@@ -880,6 +876,8 @@
         window.resetCatalogFormState = function() {
             document.getElementById('catalogConfigForm').reset();
             document.getElementById('editServiceId').value = "";
+            document.getElementById('srvNote').value = "";
+            document.getElementById('srvFaqs').value = "";
             document.getElementById('catalogFormTitle').textContent = "Create Service Entry";
             document.getElementById('srvSubmitBtn').textContent = "Commit Entry Live to Storefront";
             document.getElementById('srvCancelBtn').style.display = "none";

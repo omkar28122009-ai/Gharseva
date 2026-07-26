@@ -137,6 +137,35 @@
         .deep-desc { font-size: 0.82rem; color: var(--text-muted); line-height: 1.5; }
         .deep-block-title { font-size: 0.72rem; font-weight: 800; text-transform: uppercase; color: var(--brand-glow-gold); letter-spacing: 0.5px; margin-bottom: 8px; }
 
+        /* --- CUSTOM SERVICE NOTE SECTION STYLING --- */
+        .custom-note-box {
+            background: rgba(251, 191, 36, 0.08);
+            border: 1px solid rgba(251, 191, 36, 0.25);
+            border-radius: 14px;
+            padding: 12px 16px;
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+        }
+        .custom-note-box i {
+            color: var(--brand-glow-gold);
+            font-size: 1.1rem;
+            margin-top: 2px;
+        }
+        .custom-note-box-content h5 {
+            font-size: 0.72rem;
+            font-weight: 800;
+            color: var(--brand-glow-gold);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 2px;
+        }
+        .custom-note-box-content p {
+            font-size: 0.78rem;
+            color: #f1f5f9;
+            line-height: 1.4;
+        }
+
         /* 2. Quick Info Cards Layout */
         .quick-info-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-bottom: 4px; }
         .info-pill-card { background: rgba(255, 255, 255, 0.03); border: 1px solid var(--border-color); padding: 8px 4px; border-radius: 12px; text-align: center; }
@@ -229,6 +258,7 @@
             </div>
         </section>
 
+        <!-- SERVICE INSPECTOR MODAL WITH CUSTOM NOTE & FAQ SECTIONS -->
         <div class="modal-overlay" id="deepViewModal" onclick="toggleDeepViewModal(false)">
             <div class="modal-window" onclick="event.stopPropagation()">
                 <div class="modal-header">
@@ -239,6 +269,15 @@
                 <div class="deep-view-body">
                     <div>
                         <p class="deep-desc" id="deepModalDesc"></p>
+                    </div>
+
+                    <!-- DYNAMIC CUSTOM NOTE CALLOUT SECTION -->
+                    <div class="custom-note-box" id="deepModalNoteBox" style="display: none;">
+                        <i class="fas fa-circle-info"></i>
+                        <div class="custom-note-box-content">
+                            <h5>Important Service Note</h5>
+                            <p id="deepModalNoteText"></p>
+                        </div>
                     </div>
 
                     <div class="quick-info-grid">
@@ -266,8 +305,7 @@
 
                     <div>
                         <div class="deep-block-title">Work Parameters Matrix</div>
-                        <div class="inc-exc-box" id="incExcContainer">
-                            </div>
+                        <div class="inc-exc-box" id="incExcContainer"></div>
                     </div>
 
                     <div class="premium-pricing-card">
@@ -288,10 +326,10 @@
                         </div>
                     </div>
 
+                    <!-- SERVICE-SPECIFIC FAQ ACCORDION SYSTEM -->
                     <div>
                         <div class="deep-block-title">Frequently Asked Questions</div>
-                        <div class="faq-accordion-group" id="faqAccordionGroup">
-                            </div>
+                        <div class="faq-accordion-group" id="faqAccordionGroup"></div>
                     </div>
                 </div>
 
@@ -299,8 +337,7 @@
                     <div style="opacity: 0.6; font-size: 0.65rem; font-weight:600; max-width:60%;">
                         Taxes & platform infrastructure processing included.
                     </div>
-                    <div id="deepModalActionSlot">
-                        </div>
+                    <div id="deepModalActionSlot"></div>
                 </div>
             </div>
         </div>
@@ -355,12 +392,48 @@
     const searchInput = document.getElementById('searchInput');
     const categoryPills = document.querySelectorAll('.category-pill');
 
-    // Default Fallback / Seed Catalog
+    // Default Fallback / Seed Catalog with custom Notes & custom FAQs support
     const localSeedCatalog = [
-        { id: "service_ac_servicing", title: "AC Servicing", desc: "Complete diagnostic cleaning, jet washing, air filter purification, and leak checking.", price: 499, strike: 699, duration: "60-90 Min", warranty: "30 Days", rating: 4.8, reviews: "2.4k", category: "appliances", image: "https://images.unsplash.com/photo-1621905251189-08b45d6a269e?auto=format&fit=crop&w=200&q=80", inc: ["Jet pump chemical deep wash", "Gas pressure checking Matrix", "Drain tray optimization"], exc: ["New capacitor replacement hardware", "Gas top-up metric charges"] },
-        { id: "service_fridge_diagnostics", title: "Refrigerator Diagnostics", desc: "Thorough internal wiring, gas checkup, thermostat calibration, and breakdown diagnostics.", price: 299, strike: 499, duration: "45-60 Min", warranty: "15 Days", rating: 4.9, reviews: "1.8k", category: "appliances", image: "https://images.unsplash.com/photo-1581092921461-eab62e97a780?auto=format&fit=crop&w=200&q=80", inc: ["Relay node connectivity scans", "Defrost timer structural sync", "Compressor temperature check"], exc: ["New logic board replacements"] },
-        { id: "service_washing_repair", title: "Washing Machine Repair", desc: "Resolves noise issues, drum blockages, outlet errors, and direct-drive failures.", price: 349, strike: 549, duration: "60-90 Min", warranty: "30 Days", rating: 4.7, reviews: "950", category: "appliances", image: "https://images.unsplash.com/photo-1620138546344-7b2c08e5c614?auto=format&fit=crop&w=200&q=80", inc: ["Drain valve filter flush", "Belt tension calibration", "Suspension spring alignment"], exc: ["Direct drive motor replacement"] },
-        { id: "service_smart_switch", title: "Smart Switch Installation", desc: "Installation and configuration of smart switches, node relays, and modern light systems.", price: 249, strike: 399, duration: "30-45 Min", warranty: "6 Months", rating: 4.9, reviews: "3k", category: "electrical", image: "https://images.unsplash.com/photo-1621905252507-b354bc25edac?auto=format&fit=crop&w=200&q=80", inc: ["Modular switchboard routing", "WiFi connection syncing", "Load capacity testing"], exc: ["Wall chiseling and plastering work"] }
+        { 
+            id: "service_ac_servicing", 
+            title: "AC Servicing", 
+            desc: "Complete diagnostic cleaning, jet washing, air filter purification, and leak checking.", 
+            note: "Please clear the area around the split AC unit before the expert arrives.",
+            price: 499, 
+            strike: 699, 
+            duration: "60-90 Min", 
+            warranty: "30 Days", 
+            rating: 4.8, 
+            reviews: "2.4k", 
+            category: "appliances", 
+            image: "https://images.unsplash.com/photo-1621905251189-08b45d6a269e?auto=format&fit=crop&w=200&q=80", 
+            inc: ["Jet pump chemical deep wash", "Gas pressure checking Matrix", "Drain tray optimization"], 
+            exc: ["New capacitor replacement hardware", "Gas top-up metric charges"],
+            faqs: [
+                { q: "Is outdoor unit cleaning included in AC Servicing?", a: "Yes, chemical jet washing for both indoor and outdoor units is included." },
+                { q: "Does this service cover refrigerant gas refilling?", a: "Gas refilling is not included in basic servicing, but gas pressure diagnostics are fully checked." }
+            ]
+        },
+        { 
+            id: "service_fridge_diagnostics", 
+            title: "Refrigerator Diagnostics", 
+            desc: "Thorough internal wiring, gas checkup, thermostat calibration, and breakdown diagnostics.", 
+            note: "Ensure refrigerator power switch is accessible during service execution.",
+            price: 299, 
+            strike: 499, 
+            duration: "45-60 Min", 
+            warranty: "15 Days", 
+            rating: 4.9, 
+            reviews: "1.8k", 
+            category: "appliances", 
+            image: "https://images.unsplash.com/photo-1581092921461-eab62e97a780?auto=format&fit=crop&w=200&q=80", 
+            inc: ["Relay node connectivity scans", "Defrost timer structural sync", "Compressor temperature check"], 
+            exc: ["New logic board replacements"],
+            faqs: [
+                { q: "How long does the refrigerator diagnosis take?", a: "Diagnosis typically takes 30 to 45 minutes." },
+                { q: "Will spare parts be charged extra?", a: "Yes, replacement parts are billed at actual component rates after client approval." }
+            ]
+        }
     ];
 
     // Load saved cart state from localStorage on init
@@ -451,7 +524,7 @@
         });
     }
 
-    // Modal Detailed View Trigger
+    // Modal Detailed View Trigger (Custom Note & FAQ Dynamic Injector)
     window.launchDeepInspector = function(itemId) {
         const matchedItem = rawServicesList.find(s => s.id === itemId || s.title === itemId);
         if (!matchedItem) return;
@@ -470,6 +543,16 @@
         if (modalTitle) modalTitle.textContent = matchedItem.title;
         if (modalDesc) modalDesc.textContent = matchedItem.desc;
 
+        // Custom Service Note Render Logic
+        const noteBox = document.getElementById('deepModalNoteBox');
+        const noteText = document.getElementById('deepModalNoteText');
+        if (matchedItem.note && matchedItem.note.trim()) {
+            if (noteText) noteText.textContent = matchedItem.note.trim();
+            if (noteBox) noteBox.style.display = 'flex';
+        } else {
+            if (noteBox) noteBox.style.display = 'none';
+        }
+
         // Pricing calculations
         const basePrice = Number(matchedItem.price) || 0;
         const strikePrice = Number(matchedItem.strike) || (basePrice + 200);
@@ -483,7 +566,7 @@
         if (infoWarranty) infoWarranty.textContent = matchedItem.warranty || "30 Days";
         if (infoDuration) infoDuration.textContent = matchedItem.duration || "60-90 Min";
 
-        // Inclusions & Exclusions safely handled
+        // Inclusions & Exclusions
         let localInclusions = [];
         if (Array.isArray(matchedItem.inc) && matchedItem.inc.length > 0) {
             localInclusions = matchedItem.inc;
@@ -509,13 +592,18 @@
             matrixContainer.innerHTML = matrixHtml;
         }
 
-        // FAQs
+        // Service-Specific Dynamic FAQs
         if (faqContainer) {
-            const faqs = [
-                { q: "How long does the operational process take?", a: `Standard processing takes exactly ${matchedItem.duration || '60-90 minutes'} depending on system diagnostics layout.` },
-                { q: "Are replacement parts included in starting charge?", a: "No. The catalog rate covers engineering visits and labor. Realtime spare parts are extra." },
-                { q: "Is the post-repair service warranty structure trackable?", a: `Yes. Every execution covers a secure ${matchedItem.warranty || '30 days'} backend support warranty loop instantly.` }
-            ];
+            let faqs = [];
+            if (Array.isArray(matchedItem.faqs) && matchedItem.faqs.length > 0) {
+                faqs = matchedItem.faqs;
+            } else {
+                faqs = [
+                    { q: "How long does the operational process take?", a: `Standard processing takes exactly ${matchedItem.duration || '60-90 minutes'} depending on system diagnostics layout.` },
+                    { q: "Are replacement parts included in starting charge?", a: "No. The catalog rate covers engineering visits and labor. Realtime spare parts are extra." },
+                    { q: "Is the post-repair service warranty structure trackable?", a: `Yes. Every execution covers a secure ${matchedItem.warranty || '30 days'} backend support warranty loop instantly.` }
+                ];
+            }
 
             faqContainer.innerHTML = faqs.map((f, index) => `
                 <div class="faq-item" id="faqItem-${index}">

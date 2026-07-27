@@ -1019,10 +1019,10 @@
         if(!input) return;
         const token = input.value.trim().toUpperCase();
         
-        if(token === "GHARSEVA100") {
-            discountApplied = 100;
+        if(token === "GHARSEVA50") {
+            discountApplied = 50;
             appliedPromoCode = token;
-            showToast("Coupon applied: ₹100 Discount!");
+            showToast("Coupon applied: ₹50 Discount!");
             document.getElementById('discountRow').style.display = 'flex';
         } else if(token === "") {
             showToast("Please enter a coupon code.", false);

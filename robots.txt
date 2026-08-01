@@ -1,0 +1,9 @@
+User-agent: *
+Allow: /
+Disallow: /auth.html
+Disallow: /booking.html
+Disallow: /services.html
+Disallow: /admin-panel.html
+Disallow: /partner-dashboard.html
+
+Sitemap: https://gharseva-com.netlify.app/sitemap.xml

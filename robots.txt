@@ -1,0 +1,19 @@
+# Robots.txt for GharSeva Home Services (https://gharseva.com)
+User-agent: *
+Allow: /
+Allow: /index.html
+Allow: /services.html
+Allow: /services
+Allow: /booking.html
+Allow: /booking
+Allow: /auth.html
+Allow: /auth
+
+# Disallow private management dashboards
+Disallow: /admin-panel.html
+Disallow: /admin-panel
+Disallow: /partner-dashboard.html
+Disallow: /partner-dashboard
+
+# Sitemap Location
+Sitemap: https://gharseva.com/sitemap.xml

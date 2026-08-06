@@ -1,0 +1,23 @@
+{
+  "name": "GharSeva | Premium Doorstep Home Services",
+  "short_name": "GharSeva",
+  "description": "On-demand doorstep home services in Mumbai including AC repair, refrigerator diagnostics, washing machine service, electrician & plumbing with 30-day warranty.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#030712",
+  "theme_color": "#0b0f19",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "https://images.unsplash.com/photo-1621905251189-08b45d6a269e?auto=format&fit=crop&w=192&q=80",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "https://images.unsplash.com/photo-1621905251189-08b45d6a269e?auto=format&fit=crop&w=512&q=80",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ],
+  "categories": ["lifestyle", "utilities", "business"]
+}

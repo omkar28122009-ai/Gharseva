@@ -1,0 +1,6 @@
+# Clean URL Redirects for GharSeva SEO
+/services    /services.html   200
+/booking     /booking.html    200
+/auth        /auth.html       200
+
+# Redirect HTTP to HTTPS & enforce clean canonicals if requested

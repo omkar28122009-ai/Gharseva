@@ -3,12 +3,109 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Our Services | GharSeva</title>
     
+    <!-- Ultra Pro Primary SEO Meta Tags -->
+    <title>Home Service Pricing &amp; Catalog | GharSeva Mumbai</title>
+    <meta name="description" content="Explore GharSeva's doorstep home repair prices in Mumbai. Transparent rates for AC jet servicing, refrigerator diagnostics, washing machine repair &amp; plumbing with 30-day warranty.">
+    <meta name="keywords" content="AC service charges Mumbai, fridge repair cost, washing machine service price, electrician charges Mumbai, home service catalog, GharSeva service pricing">
+    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
+    <link rel="canonical" href="https://gharseva.com/services.html">
+    <meta name="author" content="GharSeva Technologies">
+    
+    <!-- Geo Location Meta Tags -->
+    <meta name="geo.region" content="IN-MH">
+    <meta name="geo.placename" content="Mumbai">
+    <meta name="geo.position" content="19.0760;72.8777">
+    <meta name="ICBM" content="19.0760, 72.8777">
+
+    <!-- Web App Manifest & Theme Color -->
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#0b0f19">
+
+    <!-- Open Graph Meta Tags -->
+    <meta property="og:site_name" content="GharSeva">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://gharseva.com/services.html">
+    <meta property="og:title" content="Home Service Pricing &amp; Catalog | GharSeva Mumbai">
+    <meta property="og:description" content="Transparent, fixed pricing for doorstep AC servicing, refrigerator diagnostics, washing machine repair &amp; plumbing in Mumbai. 30-day warranty included.">
+    <meta property="og:image" content="https://images.unsplash.com/photo-1621905251189-08b45d6a269e?auto=format&amp;fit=crop&amp;w=1200&amp;q=80">
+    <meta property="og:locale" content="en_IN">
+
+    <!-- Twitter Card Meta Tags -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:url" content="https://gharseva.com/services.html">
+    <meta name="twitter:title" content="GharSeva Home Services Catalog &amp; Pricing">
+    <meta name="twitter:description" content="Transparent upfront rates for doorstep AC, fridge &amp; washing machine repair in Mumbai.">
+    <meta name="twitter:image" content="https://images.unsplash.com/photo-1621905251189-08b45d6a269e?auto=format&amp;fit=crop&amp;w=1200&amp;q=80">
+
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet">
+
+    <!-- Schema.org JSON-LD Structured Data -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "BreadcrumbList",
+          "@id": "https://gharseva.com/services.html#breadcrumb",
+          "itemListElement": [
+            {
+              "@type": "ListItem",
+              "position": 1,
+              "name": "Home",
+              "item": "https://gharseva.com/"
+            },
+            {
+              "@type": "ListItem",
+              "position": 2,
+              "name": "Service Catalog",
+              "item": "https://gharseva.com/services.html"
+            }
+          ]
+        },
+        {
+          "@type": "OfferCatalog",
+          "@id": "https://gharseva.com/services.html#catalog",
+          "name": "GharSeva Doorstep Home Repair Services Catalog",
+          "itemListElement": [
+            {
+              "@type": "Offer",
+              "itemOffered": {
+                "@type": "Service",
+                "name": "AC Jet Servicing & Maintenance",
+                "description": "Complete diagnostic cleaning, jet washing, air filter purification, and refrigerant gas pressure check."
+              },
+              "price": "499",
+              "priceCurrency": "INR"
+            },
+            {
+              "@type": "Offer",
+              "itemOffered": {
+                "@type": "Service",
+                "name": "Refrigerator Diagnostic & Repair",
+                "description": "Wiring check, gas pressure checkup, thermostat calibration, compressor diagnostic."
+              },
+              "price": "299",
+              "priceCurrency": "INR"
+            },
+            {
+              "@type": "Offer",
+              "itemOffered": {
+                "@type": "Service",
+                "name": "Washing Machine Drum & Drainage Repair",
+                "description": "Top load & front load drum inspection, drainage pump check, motor issue diagnostics."
+              },
+              "price": "399",
+              "priceCurrency": "INR"
+            }
+          ]
+        }
+      ]
+    }
+    </script>
 
     <style>
         /* --- 1. DESIGN TOKENS --- */
@@ -222,48 +319,48 @@
         <div class="glow-orb orb-1"></div>
         <div class="glow-orb orb-2"></div>
 
-        <nav class="navbar">
-            <a href="booking.html" class="btn-back"><i class="fas fa-arrow-left"></i></a>
-            <div class="brand-logo">Service Catalog</div>
+        <header class="navbar">
+            <a href="index.html" class="btn-back" title="Back to Home"><i class="fas fa-arrow-left"></i></a>
+            <h1 class="brand-logo" style="font-size:1.1rem; margin:0;">GharSeva Catalog</h1>
             <div style="width: 36px;"></div> 
-        </nav>
+        </header>
 
-        <section class="section-padding">
-            <span class="tagline">GharSeva Care</span>
+        <main class="section-padding">
+            <span class="tagline">GharSeva Care Pricing</span>
             <h2 class="section-title">Professional home repair systems</h2>
 
             <div class="search-box-wrapper">
                 <i class="fas fa-search search-icon"></i>
-                <input type="text" id="searchInput" class="search-input" placeholder="Search appliances, prices, ratings...">
+                <input type="text" id="searchInput" class="search-input" placeholder="Search appliances, prices, ratings..." aria-label="Search home services catalog">
             </div>
 
-            <div class="category-scroller">
+            <nav class="category-scroller" aria-label="Filter by Category">
                 <span class="category-pill active" data-category="all">All Services</span>
                 <span class="category-pill" data-category="appliances">Appliances</span>
                 <span class="category-pill" data-category="electrical">Electrical</span>
                 <span class="category-pill" data-category="plumbing">Plumbing</span>
-            </div>
+            </nav>
 
-            <div class="services-vertical-stack" id="servicesStack">
+            <section class="services-vertical-stack" id="servicesStack">
                 <div class="cloud-loader" id="cloudLoader">
                     <i class="fas fa-circle-notch"></i>
-                    <p>Contacting secure data nodes...</p>
+                    <p>Loading doorstep services...</p>
                 </div>
-            </div>
+            </section>
 
             <div class="empty-state" id="emptyState" style="display: none;">
                 <i class="fas fa-search-minus" style="font-size: 2rem; color: var(--brand-glow-orange); margin-bottom: 8px;"></i>
                 <h4>No Services Found</h4>
                 <p>Try clearing filters or search parameters.</p>
             </div>
-        </section>
+        </main>
 
         <!-- SERVICE INSPECTOR MODAL WITH CUSTOM NOTE & FAQ SECTIONS -->
         <div class="modal-overlay" id="deepViewModal" onclick="toggleDeepViewModal(false)">
             <div class="modal-window" onclick="event.stopPropagation()">
                 <div class="modal-header">
                     <h3 id="deepModalTitle">Service Matrix Details</h3>
-                    <button class="btn-close-modal" onclick="toggleDeepViewModal(false)"><i class="fas fa-xmark"></i></button>
+                    <button class="btn-close-modal" onclick="toggleDeepViewModal(false)" aria-label="Close Service Inspector"><i class="fas fa-xmark"></i></button>
                 </div>
                 
                 <div class="deep-view-body">
@@ -335,7 +432,7 @@
 
                 <div class="deep-view-footer">
                     <div style="opacity: 0.6; font-size: 0.65rem; font-weight:600; max-width:60%;">
-                        Taxes & platform infrastructure processing included.
+                        Taxes &amp; platform infrastructure processing included.
                     </div>
                     <div id="deepModalActionSlot"></div>
                 </div>
@@ -501,14 +598,14 @@
             const category = item.category || 'all';
 
             const serviceCard = `
-                <div class="glass-card catalog-card" data-cat="${category}" onclick="launchDeepInspector('${itemId}')">
+                <article class="glass-card catalog-card" data-cat="${category}" onclick="launchDeepInspector('${itemId}')">
                     <div class="catalog-img-container">
-                        <img src="${item.image || 'https://images.unsplash.com/photo-1621905251189-08b45d6a269e?auto=format&fit=crop&w=200&q=80'}" alt="${item.title}">
+                        <img src="${item.image || 'https://images.unsplash.com/photo-1621905251189-08b45d6a269e?auto=format&fit=crop&w=200&q=80'}" alt="${item.title} doorstep service in Mumbai" loading="lazy">
                     </div>
                     <div class="catalog-details">
                         <div>
                             <div class="catalog-header">
-                                <h4 class="catalog-title">${item.title}</h4>
+                                <h3 class="catalog-title">${item.title}</h3>
                                 <span class="catalog-price">₹${item.price}</span>
                             </div>
                             <p class="catalog-desc">${item.desc}</p>
@@ -518,7 +615,7 @@
                             <button class="btn-catalog-book ${selectedClass}" onclick="event.stopPropagation(); toggleCart(this, '${itemId}', ${item.price})">${buttonText}</button>
                         </div>
                     </div>
-                </div>
+                </article>
             `;
             servicesStack.insertAdjacentHTML('beforeend', serviceCard);
         });
